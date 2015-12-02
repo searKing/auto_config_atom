@@ -139,6 +139,9 @@ use option -h to get more log_information .
 HELPEOF
 		return 0
 	fi
+	#获取当前动作
+	g_wrap_action="$1"
+
   #默认插件安装路径
   g_addon_abs_root_path="$g_cfg_output_root_dir/packages"
 	#默认配置文件绝对路径
@@ -295,6 +298,8 @@ function set_default_var_param(){
 	g_shell_name="$(basename $0)"
 	#切换并获取当前脚本所在路径
 	g_shell_repositories_abs_dir="$(cd `dirname $0`; pwd)"
+	#当前动作
+	g_wrap_action=""
 }
 #自动配置快捷键映射
 function auto_config_keymap()
@@ -332,8 +337,8 @@ function auto_config_keymap()
   'ctrl-f': 'find-and-replace:show'
 #导航
 'atom-text-editor':
-  'alt-g': 'navigation-history:back'
-  'alt-b': 'navigation-history:forward'
+  'alt-b': 'navigation-history:back'
+  'alt-g': 'navigation-history:forward'
 
 '.platform-linux atom-text-editor':
   #跳转到定义--ctrl+left
