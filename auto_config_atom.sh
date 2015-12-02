@@ -445,6 +445,9 @@ function auto_config_atom()
   if [[ $? -ne 0 ]]; then
     return 1
   fi
+  
+  #配置显示apm安装进度
+  apm config set loglevel=http
   #安装addon应用
   call_func_serializable install_addon_from_atom "$g_addon_names"
   if [[ $? -ne 0 ]]; then
