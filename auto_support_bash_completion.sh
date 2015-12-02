@@ -33,4 +33,8 @@ function auto_support_bash_completion()
 	fi
 	log_info "${LINENO}:$0 is finnished successfully"
 }
+if [[ $0 != "bash" ]]; then
+		log_warn "${LINENO}: source me please, or it'll not work until /etc/bash_completion.d/$bash_name to be source or reboot the PC Mannually."
+		read -n1 -p "Press any key to continue..."
+fi
 auto_support_bash_completion
