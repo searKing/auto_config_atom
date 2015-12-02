@@ -32,7 +32,13 @@ function usage() {
 			-v
 				verbose display
 			-o
-				the path of the out files
+				the path of the output config files
+			-p
+				the path of the dir which needs to be refreshed
+			init
+				auto install & config atom .
+			refresh
+			 	auto build file indexes for cscope & ctags
 	AUTHOR 作者
     	由 searKing Chan 完成。
 
@@ -63,6 +69,9 @@ function call_func_serializable()
 				"auto_config_atom" | "auto_config_keymap" | "auto_config_preference")
 					$func_in
 					;;
+				"init" | "refresh")
+					$func_in
+					;;
 				*)
 					log_error "${LINENO}:Invalid serializable cmd with no param: $func_in"
 					return 1
@@ -91,7 +100,50 @@ function call_func_serializable()
 			;;
 	esac
 }
+#设置默认配置参数
+function set_default_cfg_param(){
+	#覆盖前永不提示-f
+	g_cfg_force_mode=0
+	cd ~
+	#输出文件路径
+	g_cfg_output_root_dir="$(cd ~; pwd)/.atom"
+	cd - &>/dev/null
 
+	#是否显示详细信息
+	g_cfg_visual=0
+	#配置文件名称
+	g_config_keymap_file_name="keymap.cson"
+  g_preference_output_file_name="config.cson"
+  #atom主程序名
+  g_atom_app_name="atom"
+  #atom主程序下载地址
+  g_atom_deb_urn="https://atom.io/download/deb"
+  #atom插件所依赖应用名
+  g_thirdparty_app_names="ctags cscope"
+  #app插件名
+  g_addon_names="atom-chs-menu \
+  atom-ctags \
+  atom-cscope \
+  javascript-snippets \
+  file-icons \
+  navigation-history \
+  Termrk \
+  tree-view-finder \
+  git-plus \
+  pretty-json \
+  formatter"
+}
+#设置默认变量参数
+function set_default_var_param(){
+	#获取当前脚本短路径名称
+	g_shell_name="$(basename $0)"
+	#切换并获取当前脚本所在路径
+	g_shell_repositories_abs_dir="$(cd `dirname $0`; pwd)"
+	#当前动作
+	g_wrap_action=""
+	#需刷新的项目文件夹地址--默认即当前shell脚本所在路径
+	g_refresh_dir="$g_shell_repositories_abs_dir"
+}
 #解析输入参数
 function parse_params_in() {
 	if [ "$#" -lt 0 ]; then
@@ -103,7 +155,7 @@ HELPEOF
 	set_default_cfg_param #设置默认配置参数
 	set_default_var_param #设置默认变量参数
 	unset OPTIND
-	while getopts "vfo:h" opt
+	while getopts "vp:fo:h" opt
 	do
 		case $opt in
 		f)
@@ -117,6 +169,10 @@ HELPEOF
 		v)
 			#是否显示详细信息
 			g_cfg_visual=1
+			;;
+		p)
+			#需刷新的项目文件夹地址
+			g_refresh_dir=$OPTARG
 			;;
 		h)
 			usage
@@ -133,15 +189,14 @@ HELPEOF
 	#去除options参数
 	shift $(($OPTIND - 1))
 
-	if [ "$#" -lt 0 ]; then
+	if [ "$#" -lt 1 ]; then
 		cat << HELPEOF
 use option -h to get more log_information .
 HELPEOF
-		return 0
+		return 1
 	fi
 	#获取当前动作
 	g_wrap_action="$1"
-
   #默认插件安装路径
   g_addon_abs_root_path="$g_cfg_output_root_dir/packages"
 	#默认配置文件绝对路径
@@ -259,48 +314,7 @@ function install_addon_from_atom()
 		fi
 	fi
 }
-#设置默认配置参数
-function set_default_cfg_param(){
-	#覆盖前永不提示-f
-	g_cfg_force_mode=0
-	cd ~
-	#输出文件路径
-	g_cfg_output_root_dir="$(cd ~; pwd)/.atom"
-	cd - &>/dev/null
 
-	#是否显示详细信息
-	g_cfg_visual=0
-	#配置文件名称
-	g_config_keymap_file_name="keymap.cson"
-  g_preference_output_file_name="config.cson"
-  #atom主程序名
-  g_atom_app_name="atom"
-  #atom主程序下载地址
-  g_atom_deb_urn="https://atom.io/download/deb"
-  #atom插件所依赖应用名
-  g_thirdparty_app_names="ctags cscope"
-  #app插件名
-  g_addon_names="atom-chs-menu \
-  atom-ctags \
-  atom-cscope \
-  javascript-snippets \
-  file-icons \
-  navigation-history \
-  Termrk \
-  tree-view-finder \
-  git-plus \
-  pretty-json \
-  formatter"
-}
-#设置默认变量参数
-function set_default_var_param(){
-	#获取当前脚本短路径名称
-	g_shell_name="$(basename $0)"
-	#切换并获取当前脚本所在路径
-	g_shell_repositories_abs_dir="$(cd `dirname $0`; pwd)"
-	#当前动作
-	g_wrap_action=""
-}
 #自动配置快捷键映射
 function auto_config_keymap()
 {
@@ -438,10 +452,8 @@ function auto_config_atom()
   fi
 }
 
-
-
-function do_work(){
-
+#完整配置atom编辑器
+function init(){
 	auto_config_atom
   ret=$?
 	if [ $ret -ne 0 ]; then
@@ -457,6 +469,43 @@ function do_work(){
   if [ $ret -ne 0 ]; then
     return 1
   fi
+}
+#更新工程目录的ctags、cscope等的索引文件
+function refresh(){
+	if [[ ! -d $g_refresh_dir ]]; then
+		log_error "${LINENO}:refresh path($g_refresh_dir) must be a dir. EXIT"
+		return 1
+	fi
+	cd $g_refresh_dir
+	find . -name "*.c" -o -name "*.cpp" -o -name "*.h" -o -name "*.hpp" -o -name "*.java" -o -name "*.class" -o -name "*.sh" -o -name "*.cc" > cscope.files
+	ret=$?
+	if [ $ret -ne 0 ]; then
+		log_error "${LINENO}:generate cscope.files failed : $ret"
+		cd -
+		return 1
+	fi
+	cscope -q -R -b -i cscope.files
+	ret=$?
+	if [ $ret -ne 0 ]; then
+		log_error "${LINENO}:cscope run failed : $ret"
+		cd -
+		return 1
+	fi
+	ctags -R
+	ret=$?
+	if [ $ret -ne 0 ]; then
+		log_error "${LINENO}:ctags run failed : $ret"
+		cd -
+		return 1
+	fi
+	cd -
+}
+function do_work(){
+		call_func_serializable "$g_wrap_action"
+		ret=$?
+		if [ $? -ne 0 ]; then
+			return 1
+		fi
 }
 ################################################################################
 #脚本开始
