@@ -83,7 +83,10 @@ function call_func_serializable()
 			for curr_param in $param_in
 			do
 				case $func_in in
-					"install_apt_app_from_ubuntu" | "install_addon_from_atom" )
+					"install_apt_app_from_ubuntu" | "install_addon_from_atom" \
+					| "install_app_from_ruby" | "install_app_from_python" \
+					| "install_app_from_haskell" |  "install_addon_from_git" \
+					| "install_dpkg_app_from_local" | "install_dpkg_app_from_internet")
 						msmtp_generate_account_template_name=$curr_param
 						$func_in "$msmtp_generate_account_template_name"
 						if [ $? -ne 0 ]; then
@@ -121,8 +124,19 @@ function set_default_cfg_param(){
   #atom插件所依赖应用名
 	#atom-ctags			ctags
 	#atom-cscope		cscope
-	#atom-beautify	uncrustify
-  g_thirdparty_app_names="ctags cscope uncrustify"
+	#atom-beautify	uncrustify htmlbeautifier language-marko python-sqlparse
+	#ruby-beautify perltidy autopep8 ruby emacs tylish-haskell
+  g_thirdparty_app_names="ctags \
+	cscope \
+	uncrustify \
+	python-sqlparse \
+	perltidy \
+	ruby \
+	emacs \
+	cabal-install \
+	python-pip \
+	python-dev \
+	build-essential"
   #app插件名
   g_addon_names="atom-chs-menu \
   atom-ctags \
@@ -134,7 +148,32 @@ function set_default_cfg_param(){
   tree-view-finder \
   git-plus \
   pretty-json \
-  atom-beautify"
+	language-marko \
+  atom-beautify \
+	project-manager"
+  #app插件git地址，与g_addon_names一一对应
+  g_addon_urns="https://github.com/searKing/atom-chs-menu.git \
+  https://github.com/searKing/atom-ctags.git \
+  https://github.com/searKing/atom-cscope.git \
+  https://github.com/searKing/atom-javascript-snippets.git \
+  https://github.com/searKing/file-icons.git \
+  https://github.com/searKing/navigation-history.git \
+  https://github.com/searKing/termrk.git \
+  https://github.com/searKing/tree-view-finder.git \
+  https://github.com/searKing/git-plus.git \
+  https://github.com/searKing/pretty-json.git \
+	https://github.com/searKing/atom-language-marko.git \
+  https://github.com/searKing/atom-beautify.git \
+	https://github.com/searKing/atom-project-manager.git"
+
+	#gem 安装的ruby包
+	g_gem_app_names="ruby-beautify \
+	htmlbeautifier"
+	#cabal 安装的haskell包
+	g_cabal_app_names="stylish-haskell"
+
+	#pip 安装的python包
+	g_pip_app_names="pip virtualenv autopep8"
 }
 #设置默认变量参数
 function set_default_var_param(){
@@ -231,8 +270,8 @@ function install_dpkg_app_from_local()
     sudo dpkg -i "$app_urn"
     ret=$?
     if [ $ret -ne 0 ]; then
-      log_error "${LINENO}: install "$app_name" from "$app_urn" failed($ret). Exit."
-      return 1;
+      log_error "${LINENO}: install "$app_name" from "$app_urn" failed<$ret>. Exit."
+      return 1
     fi
   fi
 }
@@ -256,7 +295,7 @@ function install_dpkg_app_from_internet()
     wget -c "$app_urn" -O $app_name
     ret=$?
     if [ $ret -ne 0 ]; then
-      log_error "${LINENO}: wget "$app_name" from "$app_urn" failed($ret). Exit."
+      log_error "${LINENO}: wget "$app_name" from "$app_urn" failed<$ret>. Exit."
       return 1;
     fi
   fi
@@ -286,7 +325,7 @@ function install_apt_app_from_ubuntu()
 		sudo apt-get install "$app_name"
 		ret=$?
 		if [ $ret -ne 0 ]; then
-			log_error "${LINENO}: install "$app_name" failed($ret). Exit."
+			log_error "${LINENO}: install "$app_name" failed<$ret>. Exit."
 			return 1;
 		fi
 	fi
@@ -309,10 +348,124 @@ function install_addon_from_atom()
   fi
 
 	if [ $addon_installed -eq 0 ]; then
-		apm install "$addon_name"
+		apm install -q "$addon_name"
 		ret=$?
 		if [ $ret -ne 0 ]; then
-			log_error "${LINENO}: apm install "$addon_name" failed($ret). Exit."
+			log_error "${LINENO}: apm install "$addon_name" failed<$ret>. Exit."
+			return 1;
+		fi
+	fi
+}
+
+#安装addon应用,来源git
+function install_addon_from_git()
+{
+	expected_params_in_num=1
+	if [ $# -ne $expected_params_in_num ]; then
+		log_error "${LINENO}:$FUNCNAME expercts $expected_params_in_num param_in, but receive only $#. EXIT"
+		return 1;
+	fi
+  addon_urn=$1
+  addon_name=${addon_urn##*/}
+  addon_name=${addon_name%%.git}
+  addon_abs_full_name="$g_addon_abs_root_path/$addon_name"
+	#切换到插件packages目录
+	cd "$g_addon_abs_root_path"/
+	contain_name=$(ls |grep -i "$1")
+	#检测是否安装成功msmtp
+  addon_installed=0
+  if [[ ( -d $addon_abs_full_name ) || ( "$contain_name"x != ""x ) ]]; then
+    addon_installed=1
+  fi
+
+	if [ $addon_installed -eq 0 ]; then
+		git clone "$addon_urn"
+		ret=$?
+		if [ $ret -ne 0 ]; then
+			log_error "${LINENO}: apm install "$addon_name" failed<$ret>. Exit."
+			return 1;
+		fi
+	fi
+}
+#安装ruby应用
+function install_app_from_ruby()
+{
+	expected_params_in_num=1
+	if [ $# -ne $expected_params_in_num ]; then
+		log_error "${LINENO}:$FUNCNAME expercts $expected_params_in_num param_in, but receive only $#. EXIT"
+		return 1;
+	fi
+  app_name=$1
+	#检测是否安装成功app
+	if [ $g_cfg_visual -ne 0 ]; then
+		which "$app_name"
+	else
+		which "$app_name"	1>/dev/null
+	fi
+	#检测是否安装成功msmtp
+	if [ $? -ne 0 ]; then
+		#由于Ruby定期被墙，因此临时换用淘宝的server
+		gem sources --remove https://rubygems.org/
+		gem sources -a https://ruby.taobao.org/
+		log_info "${LINENO}:switch ruby server to :"
+		gem sources -l
+		sudo gem install "$app_name"
+		ret=$?
+		gem sources --remove https://ruby.taobao.org/
+		gem sources -a https://rubygems.org/
+
+		if [ $ret -ne 0 ]; then
+			log_error "${LINENO}: gem install "$app_name" failed<$ret>. Exit."
+			return 1;
+		fi
+	fi
+}
+#安装haskell应用
+function install_app_from_haskell()
+{
+	expected_params_in_num=1
+	if [ $# -ne $expected_params_in_num ]; then
+		log_error "${LINENO}:$FUNCNAME expercts $expected_params_in_num param_in, but receive only $#. EXIT"
+		return 1;
+	fi
+  app_name=$1
+	#检测是否安装成功app
+	if [ $g_cfg_visual -ne 0 ]; then
+		cabal list "$app_name"
+	else
+		cabal list "$app_name"	1>/dev/null
+	fi
+	#检测是否安装成功msmtp
+	if [ $? -ne 0 ]; then
+		cabal install "$app_name"
+		ret=$?
+		if [ $ret -ne 0 ]; then
+			log_error "${LINENO}: gem install "$app_name" failed<$ret>. Exit."
+			return 1;
+		fi
+	fi
+}
+#安装haskell应用
+function install_app_from_python()
+{
+	expected_params_in_num=1
+	if [ $# -ne $expected_params_in_num ]; then
+		log_error "${LINENO}:$FUNCNAME expercts $expected_params_in_num param_in, but receive only $#. EXIT"
+		return 1;
+	fi
+  app_name=$1
+	#检测是否安装成功app
+	if [ $g_cfg_visual -ne 0 ]; then
+		cabal list "$app_name"
+	else
+		cabal list "$app_name"	1>/dev/null
+	fi
+	#检测是否安装成功msmtp
+	if [ $? -ne 0 ]; then
+		pip install --upgrade "$app_name"
+		ret=$?
+		if [ $ret -ne 0 ]; then
+			log_error "${LINENO}: gem install "$app_name" failed<$ret>. Exit."
 			return 1;
 		fi
 	fi
@@ -439,11 +592,13 @@ function auto_config_atom()
 		return 1;
 	fi
 
+	log_info "${LINENO}:install_dpkg_app_from_internet start. "
   #下载并安装atom主程序
   install_dpkg_app_from_internet "$g_atom_app_name" "$g_atom_deb_urn"
   if [[ $? -ne 0 ]]; then
     return 1
   fi
+	log_info "${LINENO}:install_apt_app_from_ubuntu start. "
   #下载
   #安装deb应用
   call_func_serializable install_apt_app_from_ubuntu "$g_thirdparty_app_names"
@@ -451,10 +606,32 @@ function auto_config_atom()
     return 1
   fi
 
+	log_info "${LINENO}:install_addon_from_atom start. "
   #配置显示apm安装进度
   apm config set loglevel=http
   #安装addon应用
   call_func_serializable install_addon_from_atom "$g_addon_names"
+  if [[ $? -ne 0 ]]; then
+    return 1
+  fi
+
+	log_info "${LINENO}:install_app_from_ruby start. "
+	#安装ruby应用
+	call_func_serializable install_app_from_ruby "$g_gem_app_names"
+  if [[ $? -ne 0 ]]; then
+    return 1
+  fi
+
+	log_info "${LINENO}:install_app_from_haskell start. "
+	#安装haskell应用
+	call_func_serializable install_app_from_haskell "$g_cabal_app_names"
+  if [[ $? -ne 0 ]]; then
+    return 1
+  fi
+
+	log_info "${LINENO}:install_app_from_python start. "
+	#安装python应用
+	call_func_serializable install_app_from_python "$g_pip_app_names"
   if [[ $? -ne 0 ]]; then
     return 1
   fi
@@ -481,7 +658,7 @@ function init(){
 #更新工程目录的ctags、cscope等的索引文件
 function refresh(){
 	if [[ ! -d $g_refresh_dir ]]; then
-		log_error "${LINENO}:refresh path($g_refresh_dir) must be a dir. EXIT"
+		log_error "${LINENO}:refresh path<$g_refresh_dir> must be a dir. EXIT"
 		return 1
 	fi
 	cd $g_refresh_dir
