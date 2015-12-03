@@ -426,6 +426,8 @@ function auto_config_preference()
   Termrk:
     useDefaultKeymap: false
     defaultHeight: 81
+  "atom-beautify":
+    _analyticsUserId: "2928ffc7-ffea-49e3-b8e1-b91368dee3d1"
 CONFIGEOF
 }
 #自动配置atom
