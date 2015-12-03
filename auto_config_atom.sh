@@ -119,7 +119,10 @@ function set_default_cfg_param(){
   #atom主程序下载地址
   g_atom_deb_urn="https://atom.io/download/deb"
   #atom插件所依赖应用名
-  g_thirdparty_app_names="ctags cscope"
+	#atom-ctags			ctags
+	#atom-cscope		cscope
+	#atom-beautify	uncrustify
+  g_thirdparty_app_names="ctags cscope uncrustify"
   #app插件名
   g_addon_names="atom-chs-menu \
   atom-ctags \
