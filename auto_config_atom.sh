@@ -131,7 +131,7 @@ function set_default_cfg_param(){
   tree-view-finder \
   git-plus \
   pretty-json \
-  formatter"
+  atom-beautify"
 }
 #设置默认变量参数
 function set_default_var_param(){
@@ -445,7 +445,7 @@ function auto_config_atom()
   if [[ $? -ne 0 ]]; then
     return 1
   fi
-  
+
   #配置显示apm安装进度
   apm config set loglevel=http
   #安装addon应用
