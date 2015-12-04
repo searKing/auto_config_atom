@@ -131,7 +131,7 @@ function set_default_cfg_param(){
 	uncrustify \
 	python-sqlparse \
 	perltidy \
-	ruby \
+	ruby2.0 \
 	emacs \
 	cabal-install \
 	python-pip \
@@ -322,7 +322,7 @@ function install_apt_app_from_ubuntu()
 	fi
 
 	if [ $? -ne 0 ]; then
-		sudo apt-get install "$app_name"
+		sudo apt-get install -y "$app_name"
 		ret=$?
 		if [ $ret -ne 0 ]; then
 			log_error "${LINENO}: install "$app_name" failed<$ret>. Exit."
@@ -387,6 +387,31 @@ function install_addon_from_git()
 		fi
 	fi
 }
+#切换ruby版本
+function switch_ruby_version_if_lessthan_2_0()
+{
+	expected_params_in_num=1
+	if [ $# -ne $expected_params_in_num ]; then
+		log_error "${LINENO}:$FUNCNAME expercts $expected_params_in_num param_in, but receive only $#. EXIT"
+		return 1;
+	fi
+	version_number=$1
+	#检测当前ruby版本
+	ruby_link=$(ls -l "`which ruby`")
+	#>=2.0 不切换，因为atom需要最低2.0
+	if [[ ( "$ruby_link"x =~ "ruby0" ) \
+		|| ( "$ruby_link"x =~ "ruby1" ) ]]; then
+		sudo ln -sb ruby"$version_number" $(which ruby)
+		sudo ln -sf gem"$version_number" 	$(which gem)
+		sudo ln -sf erb"$version_number" 	$(which erb)
+		sudo ln -sf irb"$version_number" 	$(which irb)
+		sudo ln -sf rake"$version_number" $(which rake)
+		sudo ln -sf rdoc"$version_number" $(which rdoc)
+		sudo ln -sf testrb"$version_number" $(which testrb)
+		sudo gem update --system
+		sudo gem pristine --all
+	fi
+}
 #安装ruby应用
 function install_app_from_ruby()
 {
@@ -396,6 +421,13 @@ function install_app_from_ruby()
 		return 1;
 	fi
   app_name=$1
+	#检测并切换当前ruby版本
+	switch_ruby_version_if_lessthan_2_0 "2.0"
+	if [ $? -ne 0 ]; then
+		return 1;
+	fi
+
+
 	#检测是否安装成功app
 	if [ $g_cfg_visual -ne 0 ]; then
 		which "$app_name"
@@ -404,19 +436,22 @@ function install_app_from_ruby()
 	fi
 	#检测是否安装成功msmtp
 	if [ $? -ne 0 ]; then
-		#由于Ruby定期被墙，因此临时换用淘宝的server
-		gem sources --remove https://rubygems.org/
-		gem sources -a https://ruby.taobao.org/
-		log_info "${LINENO}:switch ruby server to :"
-		gem sources -l
 		sudo gem install "$app_name"
 		ret=$?
-		gem sources --remove https://ruby.taobao.org/
-		gem sources -a https://rubygems.org/
-
 		if [ $ret -ne 0 ]; then
-			log_error "${LINENO}: gem install "$app_name" failed<$ret>. Exit."
-			return 1;
+			#由于Ruby定期被墙，因此临时换用淘宝的server
+			gem sources --remove https://rubygems.org/
+			gem sources -a https://ruby.taobao.org/
+			log_info "${LINENO}:switch ruby server to :"
+			gem sources -l
+			sudo gem install "$app_name"
+			ret=$?
+			gem sources --remove https://ruby.taobao.org/
+			gem sources -a https://rubygems.org/
+			if [[ $ret -ne 0 ]]; then
+				log_error "${LINENO}: gem install "$app_name" failed<$ret>. Exit."
+				return 1;
+			fi
 		fi
 	fi
 }
