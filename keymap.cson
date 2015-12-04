@@ -1,0 +1,38 @@
+'atom-text-editor.vim-mode':
+  #关闭vim-mode下的快捷键，ctrl-c/v与系统冲突
+  #'ctrl-c': 'vim-mode:reset-normal-mode'
+  'ctrl-c': 'core:copy'
+'atom-text-editor.vim-mode.normal-mode':
+  #'ctrl-v': 'vim-mode:activate-blockwise-visual-mode'
+  'ctrl-v': 'core:paste'
+  #'ctrl-a': 'vim-mode:increase'
+  'ctrl-a': 'core:select-all'
+'atom-text-editor.vim-mode.visual-mode':
+  #'ctrl-v': 'vim-mode:activate-blockwise-visual-mode'
+  'ctrl-v': 'core:paste'
+
+'atom-text-editor.vim-mode:not(.insert-mode)':
+  #'ctrl-f': 'vim-mode:scroll-full-screen-down'
+  'ctrl-f': 'find-and-replace:show'
+#导航
+'atom-text-editor':
+  'alt-b': 'navigation-history:back'
+  'alt-g': 'navigation-history:forward'
+
+'.platform-linux atom-text-editor':
+  #跳转到定义--ctrl+left
+  #'alt-g': 'atom-ctags:go-to-declaration'
+  #跳转回调用
+  #'alt-b': 'atom-ctags:return-from-declaration'
+  #Symbol Definition
+  #'alt-/': 'atom-cscope:this-global-definition'
+  #Jump to Caller
+	'alt-c': 'atom-cscope:find-functions-calling'
+	#Jump to definition
+	'cmd-e': 'atom-cscope:find-this-symbol'
+'atom-workspace':
+  'alt-t': 'termrk:toggle'
+  'alt-q': 'termrk:close-terminal'
+  #find . -name "*.c" -o -name "*.cpp" -o -name "*.h" -o -name "*.hpp" -o -name "*.java" -o -name "*.class" -o -name "*.sh" -o -name "*.cc" > cscope.files
+  #cscope -q -R -b -i cscope.files
+  #ctags -R

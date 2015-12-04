@@ -128,6 +128,7 @@ function set_default_cfg_param(){
 	#ruby-beautify perltidy autopep8 ruby emacs tylish-haskell
   g_thirdparty_app_names="ctags \
 	cscope \
+	universalindentgui \
 	uncrustify \
 	python-sqlparse \
 	perltidy \

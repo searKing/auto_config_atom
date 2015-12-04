@@ -1,0 +1,38 @@
+"*":
+  "exception-reporting":
+    userId: "3e7650fb-7f09-2225-ecd9-24a24ac508ba"
+  core:
+    disabledPackages: [
+      "symbols-view"
+      "run-in-terminal"
+    ]
+    audioBeep: false
+  editor:
+    invisibles: {}
+    fontSize: 13
+    tabLength: 4
+  "atom-ctags":
+    GotoSymbolKey: [
+      "ctrl"
+    ]
+  "atom-cscope": {}
+  "vim-mode": {}
+  "android-debugger": {}
+  "navigation-history":
+    maxNavigationsToRemember: 10000
+  "run-in-terminal":
+    save_before_launch: false
+  Termrk:
+    useDefaultKeymap: false
+    defaultHeight: 81
+  minimap: {}
+  "git-plus": {}
+  "atom-beautify":
+    _analyticsUserId: "2928ffc7-ffea-49e3-b8e1-b91368dee3d1"
+    cpp_configPath: "~/.atom/uncrustify.cfg"
+    c_configPath: "~/.atom/uncrustify.cfg"
+    cs_configPath: "~/.atom/uncrustify.cfg"
+    arduino_configPath: "~/.atom/uncrustify.cfg"
+    java_configPath: "~/.atom/uncrustify.cfg"
+  welcome:
+    showOnStartup: false
