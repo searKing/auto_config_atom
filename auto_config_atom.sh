@@ -396,6 +396,11 @@ function switch_ruby_version_if_lessthan_2_0()
 		return 1;
 	fi
 	version_number=$1
+	ruby_new_link=$(which "ruby$version_number")
+	if [[ "$ruby_new_link"x == ""x ]]; then
+		log_error "${LINENO}:$FUNCNAME: ruby$version_number is not installed yet. EXIT"
+		return 1;
+	fi
 	#检测当前ruby版本
 	ruby_link=$(ls -l "`which ruby`")
 	#>=2.0 不切换，因为atom需要最低2.0
