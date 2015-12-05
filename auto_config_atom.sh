@@ -168,8 +168,7 @@ function set_default_cfg_param(){
 	language-marko \
 	atom-beautify \
 	project-manager \
-	linter-shellcheck \
-	archive-view"
+	linter-shellcheck"
   	#app插件git地址，与g_addon_names一一对应
 	g_addon_urns="https://github.com/searKing/atom-chs-menu.git \
 	https://github.com/searKing/atom-ctags.git \
@@ -197,8 +196,7 @@ function set_default_cfg_param(){
 	https://github.com/searKing/atom-language-marko.git \
 	https://github.com/searKing/atom-beautify.git \
 	https://github.com/searKing/atom-project-manager.git \
-	https://github.com/searKing/linter-shellcheck.git \
-	https://github.com/searKing/archive-view.git"
+	https://github.com/searKing/linter-shellcheck.git"
 
 	#gem 安装的ruby包
 	g_gem_app_names="ruby-beautify \
