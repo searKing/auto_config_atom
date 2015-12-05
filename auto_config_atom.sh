@@ -115,56 +115,58 @@ function set_default_cfg_param(){
 	#是否显示详细信息
 	g_cfg_visual=0
 	#配置文件名称
-	g_config_keymap_file_name="keymap.cson"
-  g_preference_output_file_name="config.cson"
-  #atom主程序名
-  g_atom_app_name="atom"
-  #atom主程序下载地址
-  g_atom_deb_urn="https://atom.io/download/deb"
-  #atom插件所依赖应用名
+	g_keymap_output_file_name="keymap.cson"
+  	g_preference_output_file_name="config.cson"
+  	g_uncrustify_output_file_name="uncrustify.cfg"
+  	#atom主程序名
+  	g_atom_app_name="atom"
+  	#atom主程序下载地址
+  	g_atom_deb_urn="https://atom.io/download/deb"
+  	#atom插件所依赖应用名
 	#atom-ctags			ctags
 	#atom-cscope		cscope
 	#atom-beautify	uncrustify htmlbeautifier language-marko python-sqlparse
 	#ruby-beautify perltidy autopep8 ruby emacs tylish-haskell
-  g_thirdparty_app_names="ctags \
+  	g_thirdparty_app_names="ctags \
 	cscope \
 	universalindentgui \
 	uncrustify \
 	python-sqlparse \
 	perltidy \
+	ruby \
 	ruby2.0 \
 	emacs \
 	cabal-install \
 	python-pip \
 	python-dev \
 	build-essential"
-  #app插件名
-  g_addon_names="atom-chs-menu \
-  atom-ctags \
-  atom-cscope \
-  javascript-snippets \
-  file-icons \
-  navigation-history \
-  Termrk \
-  tree-view-finder \
-  git-plus \
-  pretty-json \
+  	#app插件名
+  	g_addon_names="atom-chs-menu \
+	atom-ctags \
+	atom-cscope \
+	javascript-snippets \
+	file-icons \
+	navigation-history \
+	Termrk \
+	tree-view-finder \
+	git-plus \
+	pretty-json \
 	language-marko \
-  atom-beautify \
+	atom-beautify \
 	project-manager"
-  #app插件git地址，与g_addon_names一一对应
-  g_addon_urns="https://github.com/searKing/atom-chs-menu.git \
-  https://github.com/searKing/atom-ctags.git \
-  https://github.com/searKing/atom-cscope.git \
-  https://github.com/searKing/atom-javascript-snippets.git \
-  https://github.com/searKing/file-icons.git \
-  https://github.com/searKing/navigation-history.git \
-  https://github.com/searKing/termrk.git \
-  https://github.com/searKing/tree-view-finder.git \
-  https://github.com/searKing/git-plus.git \
-  https://github.com/searKing/pretty-json.git \
+  	#app插件git地址，与g_addon_names一一对应
+	g_addon_urns="https://github.com/searKing/atom-chs-menu.git \
+	https://github.com/searKing/atom-ctags.git \
+	https://github.com/searKing/atom-cscope.git \
+	https://github.com/searKing/atom-javascript-snippets.git \
+	https://github.com/searKing/file-icons.git \
+	https://github.com/searKing/navigation-history.git \
+	https://github.com/searKing/termrk.git \
+	https://github.com/searKing/tree-view-finder.git \
+	https://github.com/searKing/git-plus.git \
+	https://github.com/searKing/pretty-json.git \
 	https://github.com/searKing/atom-language-marko.git \
-  https://github.com/searKing/atom-beautify.git \
+	https://github.com/searKing/atom-beautify.git \
 	https://github.com/searKing/atom-project-manager.git"
 
 	#gem 安装的ruby包
@@ -243,8 +245,10 @@ HELPEOF
   #默认插件安装路径
   g_addon_abs_root_path="$g_cfg_output_root_dir/packages"
 	#默认配置文件绝对路径
-  g_keymap_output_file_abs_name="$g_cfg_output_root_dir/$g_config_keymap_file_name"
+  g_keymap_output_file_abs_name="$g_cfg_output_root_dir/$g_keymap_output_file_name"
   g_preference_output_file_abs_name="$g_cfg_output_root_dir/$g_preference_output_file_name"
+  g_uncrustify_output_file_abs_name="$g_cfg_output_root_dir/$g_uncrustify_output_file_name"
+
 
 }
 
@@ -520,7 +524,7 @@ function auto_config_keymap()
 			log_error "${LINENO}:"$g_keymap_output_file_abs_name" files is already exist. use -f to override? Exit."
 			return 1
 		else
-    		rm "$g_keymap_output_file_abs_name" -Rf
+		mv "$g_keymap_output_file_abs_name" "$g_keymap_output_file_abs_name".bak
     fi
   else
       config_file_dir=${g_keymap_output_file_abs_name%/*}
@@ -528,47 +532,16 @@ function auto_config_keymap()
         mkdir -p "$config_file_dir"
       fi
   fi
-
-    cat > $g_keymap_output_file_abs_name <<CONFIGEOF
-'atom-text-editor.vim-mode':
-  #关闭vim-mode下的快捷键，ctrl-c/v与系统冲突
-  #'ctrl-c': 'vim-mode:reset-normal-mode'
-  'ctrl-c': 'core:copy'
-'atom-text-editor.vim-mode.normal-mode':
-  #'ctrl-v': 'vim-mode:activate-blockwise-visual-mode'
-  'ctrl-v': 'core:paste'
-  #'ctrl-a': 'vim-mode:increase'
-  'ctrl-a': 'core:select-all'
-'atom-text-editor.vim-mode.visual-mode':
-  #'ctrl-v': 'vim-mode:activate-blockwise-visual-mode'
-  'ctrl-v': 'core:paste'
-
-'atom-text-editor.vim-mode:not(.insert-mode)':
-  #'ctrl-f': 'vim-mode:scroll-full-screen-down'
-  'ctrl-f': 'find-and-replace:show'
-#导航
-'atom-text-editor':
-  'alt-b': 'navigation-history:back'
-  'alt-g': 'navigation-history:forward'
-
-'.platform-linux atom-text-editor':
-  #跳转到定义--ctrl+left
-  #'alt-g': 'atom-ctags:go-to-declaration'
-  #跳转回调用
-  #'alt-b': 'atom-ctags:return-from-declaration'
-  #Symbol Definition
-  #'alt-/': 'atom-cscope:this-global-definition'
-  #Jump to Caller
-	'alt-c': 'atom-cscope:find-functions-calling'
-	#Jump to definition
-	'cmd-e': 'atom-cscope:find-this-symbol'
-'atom-workspace':
-  'alt-t': 'termrk:toggle'
-  'alt-q': 'termrk:close-terminal'
-  #find . -name "*.c" -o -name "*.cpp" -o -name "*.h" -o -name "*.hpp" -o -name "*.java" -o -name "*.class" -o -name "*.sh" -o -name "*.cc" > cscope.files
-  #cscope -q -R -b -i cscope.files
-  #ctags -R
-CONFIGEOF
+	if [[ ! -f $g_keymap_output_file_name ]]; then
+		log_error "${LINENO}:"$g_keymap_output_file_abs_name" files is not exist. use git clone to reload? Exit."
+		return 1
+	fi
+	cp $g_keymap_output_file_name $g_keymap_output_file_abs_name
+	#检测是否安装成功msmtp
+	if [ $? -ne 0 ]; then
+		log_error "${LINENO}: cp $g_keymap_output_file_name to  $g_keymap_output_file_abs_name failed. Exit."
+		return 1;
+	fi
 }
 #自动配置偏好信息
 function auto_config_preference()
@@ -578,7 +551,7 @@ function auto_config_preference()
 			log_error "${LINENO}:"$g_preference_output_file_abs_name" files is already exist. use -f to override? Exit."
 			return 1
 		else
-    		rm "$g_preference_output_file_abs_name" -Rf
+		mv "$g_preference_output_file_abs_name" "$g_preference_output_file_abs_name".bak
     fi
   else
       config_file_dir=${g_preference_output_file_abs_name%/*}
@@ -586,43 +559,43 @@ function auto_config_preference()
         mkdir -p "$config_file_dir"
       fi
   fi
-  cat > "$g_preference_output_file_abs_name" <<CONFIGEOF
-"*":
-  "exception-reporting":
-    userId: "3e7650fb-7f09-2225-ecd9-24a24ac508ba"
-  welcome:
-    showOnStartup: true
-  core:
-    disabledPackages: [
-      "symbols-view"
-      "run-in-terminal"
-    ]
-    audioBeep: false
-  editor:
-    invisibles: {}
-    fontSize: 13
-  "atom-ctags":
-    GotoSymbolKey: [
-      "ctrl"
-    ]
-  "atom-cscope": {}
-  "vim-mode": {}
-  "android-debugger": {}
-  "navigation-history":
-    maxNavigationsToRemember: 10000
-  "run-in-terminal":
-    save_before_launch: false
-  "Termrk":
-    useDefaultKeymap: false
-    defaultHeight: 81
-  "minimap": {}
-  "git-plus": {}
-  Termrk:
-    useDefaultKeymap: false
-    defaultHeight: 81
-  "atom-beautify":
-    _analyticsUserId: "2928ffc7-ffea-49e3-b8e1-b91368dee3d1"
-CONFIGEOF
+	if [[ ! -f $g_preference_output_file_name ]]; then
+		log_error "${LINENO}:"$g_preference_output_file_name" files is not exist. use git clone to reload? Exit."
+		return 1
+	fi
+	cp $g_preference_output_file_name $g_preference_output_file_abs_name
+	#检测是否安装成功msmtp
+	if [ $? -ne 0 ]; then
+		log_error "${LINENO}: cp $g_preference_output_file_name to  $g_preference_output_file_abs_name failed. Exit."
+		return 1;
+	fi
+}
+#自动配置uncrustify格式化信息
+function auto_config_uncrustify()
+{
+	if [ -f $g_uncrustify_output_file_abs_name ]; then
+	   	if [ $g_cfg_force_mode -eq 0 ]; then
+			log_error "${LINENO}:"$g_uncrustify_output_file_abs_name" files is already exist. use -f to override? Exit."
+			return 1
+		else
+			mv "$g_uncrustify_output_file_abs_name" "$g_uncrustify_output_file_abs_name".bak
+    fi
+  else
+      config_file_dir=${g_uncrustify_output_file_abs_name%/*}
+      if [ ! -d $config_file_dir ]; then
+        mkdir -p "$config_file_dir"
+      fi
+  fi
+	if [[ ! -f $g_uncrustify_output_file_name ]]; then
+		log_error "${LINENO}:"$g_uncrustify_output_file_name" files is not exist. use git clone to reload? Exit."
+		return 1
+	fi
+	cp $g_uncrustify_output_file_name $g_uncrustify_output_file_abs_name
+	#检测是否安装成功msmtp
+	if [ $? -ne 0 ]; then
+		log_error "${LINENO}: cp $g_uncrustify_output_file_name to  $g_uncrustify_output_file_abs_name failed. Exit."
+		return 1;
+	fi
 }
 #自动配置atom
 function auto_config_atom()
@@ -690,11 +663,17 @@ function init(){
   if [ $ret -ne 0 ]; then
   	return 1
   fi
+	auto_config_uncrustify
+	ret=$?
+	if [ $ret -ne 0 ]; then
+	  return 1
+	fi
   auto_config_preference
   ret=$?
   if [ $ret -ne 0 ]; then
     return 1
   fi
+
 }
 #更新工程目录的ctags、cscope等的索引文件
 function refresh(){
