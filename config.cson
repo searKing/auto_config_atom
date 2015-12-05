@@ -11,14 +11,13 @@
     invisibles: {}
     fontSize: 13
     tabLength: 4
-  "atom-chs-menu": {}
   "atom-ctags":
     GotoSymbolKey: [
       "ctrl"
     ]
-  "javascript-snippets": {}
-  "file-icons": {}
+  "atom-cscope": {}
   "vim-mode": {}
+  "android-debugger": {}
   "navigation-history":
     maxNavigationsToRemember: 10000
   "run-in-terminal":
@@ -28,10 +27,19 @@
     defaultHeight: 81
   minimap:
     scrollAnimation: true
-  "tree-view-finder": {}
+    plugins:
+      "google-repo-diff": true
+      "minimap-autohide": true
+      bookmarks: true
+      codeglance: true
+      "find-and-replace": true
+      "git-diff": true
+      "minimap-hide": true
+      linter: true
+      pigments: false
+      selection: true
+      "split-diff": true
   "git-plus": {}
-  "language-marko": {}
-  "pretty-json": {}
   "atom-beautify":
     _analyticsUserId: "2928ffc7-ffea-49e3-b8e1-b91368dee3d1"
     cpp_configPath: "/home/searking/.atom/uncrustify.cfg"
@@ -40,6 +48,5 @@
     arduino_configPath: "/home/searking/.atom/uncrustify.cfg"
     java_configPath: "/home/searking/.atom/uncrustify.cfg"
   welcome:
-    showOnStartup: true
-  "project-manager": {}
-  "linter-shellcheck": {}
+    showOnStartup: false
+  "minimap-codeglance": {}
