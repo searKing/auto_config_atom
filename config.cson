@@ -29,10 +29,10 @@
   "git-plus": {}
   "atom-beautify":
     _analyticsUserId: "2928ffc7-ffea-49e3-b8e1-b91368dee3d1"
-    cpp_configPath: "~/.atom/uncrustify.cfg"
-    c_configPath: "~/.atom/uncrustify.cfg"
-    cs_configPath: "~/.atom/uncrustify.cfg"
-    arduino_configPath: "~/.atom/uncrustify.cfg"
-    java_configPath: "~/.atom/uncrustify.cfg"
+    cpp_configPath: "/home/searking/.atom/uncrustify.cfg"
+    c_configPath: "/home/searking/.atom/uncrustify.cfg"
+    cs_configPath: "/home/searking/.atom/uncrustify.cfg"
+    arduino_configPath: "/home/searking/.atom/uncrustify.cfg"
+    java_configPath: "/home/searking/.atom/uncrustify.cfg"
   welcome:
-    showOnStartup: false
+    showOnStartup: true

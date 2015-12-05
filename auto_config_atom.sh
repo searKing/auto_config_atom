@@ -153,7 +153,8 @@ function set_default_cfg_param(){
 	pretty-json \
 	language-marko \
 	atom-beautify \
-	project-manager"
+	project-manager \
+	linter-shellcheck"
   	#app插件git地址，与g_addon_names一一对应
 	g_addon_urns="https://github.com/searKing/atom-chs-menu.git \
 	https://github.com/searKing/atom-ctags.git \
@@ -167,7 +168,8 @@ function set_default_cfg_param(){
 	https://github.com/searKing/pretty-json.git \
 	https://github.com/searKing/atom-language-marko.git \
 	https://github.com/searKing/atom-beautify.git \
-	https://github.com/searKing/atom-project-manager.git"
+	https://github.com/searKing/atom-project-manager.git \
+	https://github.com/searKing/linter-shellcheck.git"
 
 	#gem 安装的ruby包
 	g_gem_app_names="ruby-beautify \
@@ -242,14 +244,12 @@ HELPEOF
 	fi
 	#获取当前动作
 	g_wrap_action="$1"
-  #默认插件安装路径
-  g_addon_abs_root_path="$g_cfg_output_root_dir/packages"
+	#默认插件安装路径
+	g_addon_abs_root_path="$g_cfg_output_root_dir/packages"
 	#默认配置文件绝对路径
-  g_keymap_output_file_abs_name="$g_cfg_output_root_dir/$g_keymap_output_file_name"
-  g_preference_output_file_abs_name="$g_cfg_output_root_dir/$g_preference_output_file_name"
-  g_uncrustify_output_file_abs_name="$g_cfg_output_root_dir/$g_uncrustify_output_file_name"
-
-
+	g_keymap_output_file_abs_name="$g_cfg_output_root_dir/$g_keymap_output_file_name"
+	g_preference_output_file_abs_name="$g_cfg_output_root_dir/$g_preference_output_file_name"
+	g_uncrustify_output_file_abs_name="$g_cfg_output_root_dir/$g_uncrustify_output_file_name"
 }
 
 
@@ -264,21 +264,21 @@ function install_dpkg_app_from_local()
 	app_name=$1
 	app_urn=$2
 
-  #检测是否安装成功app
-  if [ $g_cfg_visual -ne 0 ]; then
-    which "$app_name"
-  else
-    which "$app_name"	1>/dev/null
-  fi
+	#检测是否安装成功app
+	if [ $g_cfg_visual -ne 0 ]; then
+		which "$app_name"
+	else
+		which "$app_name"	1>/dev/null
+	fi
 
-  if [ $? -ne 0 ]; then
-    sudo dpkg -i "$app_urn"
-    ret=$?
-    if [ $ret -ne 0 ]; then
-      log_error "${LINENO}: install "$app_name" from "$app_urn" failed<$ret>. Exit."
-      return 1
-    fi
-  fi
+	if [ $? -ne 0 ]; then
+		sudo dpkg -i "$app_urn"
+		ret=$?
+		if [ $ret -ne 0 ]; then
+			log_error "${LINENO}: install "$app_name" from "$app_urn" failed<$ret>. Exit."
+			return 1
+    	fi
+	fi
 }
 #安装deb应用
 function install_dpkg_app_from_internet()
@@ -290,24 +290,24 @@ function install_dpkg_app_from_internet()
 	fi
 	app_name=$1
 	app_urn=$2
-  #检测是否安装成功app
-  if [ $g_cfg_visual -ne 0 ]; then
-    which "$app_name"
-  else
-    which "$app_name"	1>/dev/null
-  fi
-  if [ $? -ne 0 ]; then
-    wget -c "$app_urn" -O $app_name
-    ret=$?
-    if [ $ret -ne 0 ]; then
-      log_error "${LINENO}: wget "$app_name" from "$app_urn" failed<$ret>. Exit."
-      return 1;
-    fi
-  fi
-  install_dpkg_app_from_local "$app_name" "$app_name"
-  if [[ $? -ne 0 ]]; then
-    return 1
-  fi
+	#检测是否安装成功app
+	if [ $g_cfg_visual -ne 0 ]; then
+		which "$app_name"
+	else
+		which "$app_name"	1>/dev/null
+	fi
+	if [ $? -ne 0 ]; then
+		wget -c "$app_urn" -O $app_name
+		ret=$?
+		if [ $ret -ne 0 ]; then
+			log_error "${LINENO}: wget "$app_name" from "$app_urn" failed<$ret>. Exit."
+			return 1;
+		fi
+	fi
+	install_dpkg_app_from_local "$app_name" "$app_name"
+	if [[ $? -ne 0 ]]; then
+		return 1
+	fi
 
 }
 #安装apt应用
@@ -344,13 +344,13 @@ function install_addon_from_atom()
 		log_error "${LINENO}:$FUNCNAME expercts $expected_params_in_num param_in, but receive only $#. EXIT"
 		return 1;
 	fi
-  addon_name=$1
-  addon_abs_full_name="$g_addon_abs_root_path/$addon_name"
+	addon_name=$1
+	addon_abs_full_name="$g_addon_abs_root_path/$addon_name"
 	#检测是否安装成功msmtp
-  addon_installed=0
-  if [[ -d $addon_abs_full_name ]]; then
-    addon_installed=1
-  fi
+	addon_installed=0
+	if [[ -d $addon_abs_full_name ]]; then
+		addon_installed=1
+	fi
 
 	if [ $addon_installed -eq 0 ]; then
 		apm install -q "$addon_name"
@@ -370,18 +370,18 @@ function install_addon_from_git()
 		log_error "${LINENO}:$FUNCNAME expercts $expected_params_in_num param_in, but receive only $#. EXIT"
 		return 1;
 	fi
-  addon_urn=$1
-  addon_name=${addon_urn##*/}
-  addon_name=${addon_name%%.git}
-  addon_abs_full_name="$g_addon_abs_root_path/$addon_name"
+	addon_urn=$1
+	addon_name=${addon_urn##*/}
+	addon_name=${addon_name%%.git}
+	addon_abs_full_name="$g_addon_abs_root_path/$addon_name"
 	#切换到插件packages目录
 	cd "$g_addon_abs_root_path"/
 	contain_name=$(ls |grep -i "$1")
 	#检测是否安装成功msmtp
-  addon_installed=0
-  if [[ ( -d $addon_abs_full_name ) || ( "$contain_name"x != ""x ) ]]; then
-    addon_installed=1
-  fi
+	addon_installed=0
+	if [[ ( -d $addon_abs_full_name ) || ( "$contain_name"x != ""x ) ]]; then
+		addon_installed=1
+	fi
 
 	if [ $addon_installed -eq 0 ]; then
 		git clone "$addon_urn"
@@ -430,7 +430,7 @@ function install_app_from_ruby()
 		log_error "${LINENO}:$FUNCNAME expercts $expected_params_in_num param_in, but receive only $#. EXIT"
 		return 1;
 	fi
-  app_name=$1
+	app_name=$1
 	#检测并切换当前ruby版本
 	switch_ruby_version_if_lessthan_2_0 "2.0"
 	if [ $? -ne 0 ]; then
@@ -473,7 +473,7 @@ function install_app_from_haskell()
 		log_error "${LINENO}:$FUNCNAME expercts $expected_params_in_num param_in, but receive only $#. EXIT"
 		return 1;
 	fi
-  app_name=$1
+	app_name=$1
 	#检测是否安装成功app
 	if [ $g_cfg_visual -ne 0 ]; then
 		cabal list "$app_name"
@@ -498,7 +498,7 @@ function install_app_from_python()
 		log_error "${LINENO}:$FUNCNAME expercts $expected_params_in_num param_in, but receive only $#. EXIT"
 		return 1;
 	fi
-  app_name=$1
+	app_name=$1
 	#检测是否安装成功app
 	if [ $g_cfg_visual -ne 0 ]; then
 		cabal list "$app_name"
@@ -524,14 +524,14 @@ function auto_config_keymap()
 			log_error "${LINENO}:"$g_keymap_output_file_abs_name" files is already exist. use -f to override? Exit."
 			return 1
 		else
-		mv "$g_keymap_output_file_abs_name" "$g_keymap_output_file_abs_name".bak
-    fi
-  else
+			mv "$g_keymap_output_file_abs_name" "$g_keymap_output_file_abs_name".bak
+    	fi
+  	else
       config_file_dir=${g_keymap_output_file_abs_name%/*}
       if [ ! -d $config_file_dir ]; then
         mkdir -p "$config_file_dir"
       fi
-  fi
+  	fi
 	if [[ ! -f $g_keymap_output_file_name ]]; then
 		log_error "${LINENO}:"$g_keymap_output_file_abs_name" files is not exist. use git clone to reload? Exit."
 		return 1
@@ -551,19 +551,21 @@ function auto_config_preference()
 			log_error "${LINENO}:"$g_preference_output_file_abs_name" files is already exist. use -f to override? Exit."
 			return 1
 		else
-		mv "$g_preference_output_file_abs_name" "$g_preference_output_file_abs_name".bak
-    fi
-  else
-      config_file_dir=${g_preference_output_file_abs_name%/*}
-      if [ ! -d $config_file_dir ]; then
-        mkdir -p "$config_file_dir"
-      fi
-  fi
+			mv "$g_preference_output_file_abs_name" "$g_preference_output_file_abs_name".bak
+    	fi
+	else
+		config_file_dir=${g_preference_output_file_abs_name%/*}
+		if [ ! -d $config_file_dir ]; then
+			mkdir -p "$config_file_dir"
+		fi
+  	fi
 	if [[ ! -f $g_preference_output_file_name ]]; then
 		log_error "${LINENO}:"$g_preference_output_file_name" files is not exist. use git clone to reload? Exit."
 		return 1
 	fi
-	cp $g_preference_output_file_name $g_preference_output_file_abs_name
+
+	sed "s/\/home\/searking\//\/home\/$(whoami)\//g" $g_preference_output_file_name > "$g_preference_output_file_name".tmp
+	cp "$g_preference_output_file_name".tmp $g_preference_output_file_abs_name
 	#检测是否安装成功msmtp
 	if [ $? -ne 0 ]; then
 		log_error "${LINENO}: cp $g_preference_output_file_name to  $g_preference_output_file_abs_name failed. Exit."
@@ -579,13 +581,13 @@ function auto_config_uncrustify()
 			return 1
 		else
 			mv "$g_uncrustify_output_file_abs_name" "$g_uncrustify_output_file_abs_name".bak
-    fi
-  else
-      config_file_dir=${g_uncrustify_output_file_abs_name%/*}
-      if [ ! -d $config_file_dir ]; then
-        mkdir -p "$config_file_dir"
-      fi
-  fi
+		fi
+	else
+		config_file_dir=${g_uncrustify_output_file_abs_name%/*}
+		if [ ! -d $config_file_dir ]; then
+			mkdir -p "$config_file_dir"
+		fi
+	fi
 	if [[ ! -f $g_uncrustify_output_file_name ]]; then
 		log_error "${LINENO}:"$g_uncrustify_output_file_name" files is not exist. use git clone to reload? Exit."
 		return 1
@@ -607,72 +609,75 @@ function auto_config_atom()
 	fi
 
 	log_info "${LINENO}:install_dpkg_app_from_internet start. "
-  #下载并安装atom主程序
-  install_dpkg_app_from_internet "$g_atom_app_name" "$g_atom_deb_urn"
-  if [[ $? -ne 0 ]]; then
-    return 1
-  fi
+	#下载并安装atom主程序
+	install_dpkg_app_from_internet "$g_atom_app_name" "$g_atom_deb_urn"
+	if [[ $? -ne 0 ]]; then
+		return 1
+	fi
 	log_info "${LINENO}:install_apt_app_from_ubuntu start. "
-  #下载
-  #安装deb应用
-  call_func_serializable install_apt_app_from_ubuntu "$g_thirdparty_app_names"
-  if [[ $? -ne 0 ]]; then
-    return 1
-  fi
+	#下载
+	#安装deb应用
+	call_func_serializable install_apt_app_from_ubuntu "$g_thirdparty_app_names"
+	if [[ $? -ne 0 ]]; then
+		return 1
+	fi
 
 	log_info "${LINENO}:install_addon_from_atom start. "
-  #配置显示apm安装进度
-  apm config set loglevel=http
-  #安装addon应用
-  call_func_serializable install_addon_from_atom "$g_addon_names"
-  if [[ $? -ne 0 ]]; then
-    return 1
-  fi
+	#配置显示apm安装进度
+	apm config set loglevel=http
+	log_info "${LINENO}:if you got stuck for too much time(For the Great Fire Wall as you know), \
+just press <ctrl-c> to ignore the current addon, \
+this add_on will be installed from git automatically later. easy easy"
+	#安装addon应用
+	call_func_serializable install_addon_from_atom "$g_addon_names"
+	if [[ $? -ne 0 ]]; then
+		return 1
+	fi
 
 	log_info "${LINENO}:install_app_from_ruby start. "
 	#安装ruby应用
 	call_func_serializable install_app_from_ruby "$g_gem_app_names"
-  if [[ $? -ne 0 ]]; then
-    return 1
-  fi
+	if [[ $? -ne 0 ]]; then
+		return 1
+	fi
 
 	log_info "${LINENO}:install_app_from_haskell start. "
 	#安装haskell应用
 	call_func_serializable install_app_from_haskell "$g_cabal_app_names"
-  if [[ $? -ne 0 ]]; then
-    return 1
-  fi
+	if [[ $? -ne 0 ]]; then
+		return 1
+	fi
 
 	log_info "${LINENO}:install_app_from_python start. "
 	#安装python应用
 	call_func_serializable install_app_from_python "$g_pip_app_names"
-  if [[ $? -ne 0 ]]; then
-    return 1
-  fi
+	if [[ $? -ne 0 ]]; then
+		return 1
+	fi
 }
 
 #完整配置atom编辑器
 function init(){
 	auto_config_atom
-  ret=$?
+	ret=$?
 	if [ $ret -ne 0 ]; then
 		return 1
 	fi
-  auto_config_keymap
-  ret=$?
-  if [ $ret -ne 0 ]; then
-  	return 1
-  fi
+	auto_config_keymap
+	ret=$?
+	if [ $ret -ne 0 ]; then
+		return 1
+	fi
 	auto_config_uncrustify
 	ret=$?
 	if [ $ret -ne 0 ]; then
 	  return 1
 	fi
-  auto_config_preference
-  ret=$?
-  if [ $ret -ne 0 ]; then
-    return 1
-  fi
+	auto_config_preference
+	ret=$?
+	if [ $ret -ne 0 ]; then
+		return 1
+	fi
 
 }
 #更新工程目录的ctags、cscope等的索引文件
@@ -706,11 +711,11 @@ function refresh(){
 	cd -
 }
 function do_work(){
-		call_func_serializable "$g_wrap_action"
-		ret=$?
-		if [ $? -ne 0 ]; then
-			return 1
-		fi
+	call_func_serializable "$g_wrap_action"
+	ret=$?
+	if [ $? -ne 0 ]; then
+		return 1
+	fi
 }
 ################################################################################
 #脚本开始
