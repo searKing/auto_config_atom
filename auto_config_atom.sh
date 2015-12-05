@@ -150,6 +150,18 @@ function set_default_cfg_param(){
 	navigation-history \
 	Termrk \
 	minimap \
+	minimap-autohide \
+	minimap-bookmarks \
+	minimap-codeglance \
+	minimap-find-and-replace \
+	minimap-git-diff \
+	minimap-hide \
+	minimap-highlight-selected \
+	minimap-linter \
+	minimap-pigments \
+	minimap-selection \
+	minimap-split-diff \
+	google-repo-diff-minimap \
 	tree-view-finder \
 	git-plus \
 	pretty-json \
@@ -168,6 +180,17 @@ function set_default_cfg_param(){
 	https://github.com/searKing/navigation-history.git \
 	https://github.com/searKing/termrk.git \
 	https://github.com/searKing/minimap.git \
+	https://github.com/searKing/minimap-autohide.git \
+	https://github.com/searKing/minimap-bookmarks.git \
+	https://github.com/searKing/minimap-codeglance.git \
+	https://github.com/searKing/minimap-find-and-replace.git \
+	https://github.com/searKing/minimap-git-diff.git \
+	https://github.com/searKing/minimap-hide.git \
+	https://github.com/searKing/minimap-highlight-selected.git \
+	https://github.com/searKing/minimap-linter.git \
+	https://github.com/searKing/minimap-pigments.git \
+	https://github.com/searKing/minimap-selection.git \
+	https://github.com/searKing/minimap-split-diff.git \
 	https://github.com/searKing/tree-view-finder.git \
 	https://github.com/searKing/git-plus.git \
 	https://github.com/searKing/pretty-json.git \
