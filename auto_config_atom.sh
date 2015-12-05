@@ -146,8 +146,10 @@ function set_default_cfg_param(){
 	atom-cscope \
 	javascript-snippets \
 	file-icons \
+	vim-mode \
 	navigation-history \
 	Termrk \
+	minimap \
 	tree-view-finder \
 	git-plus \
 	pretty-json \
@@ -161,8 +163,10 @@ function set_default_cfg_param(){
 	https://github.com/searKing/atom-cscope.git \
 	https://github.com/searKing/atom-javascript-snippets.git \
 	https://github.com/searKing/file-icons.git \
+	https://github.com/searKing/vim-mode.git \
 	https://github.com/searKing/navigation-history.git \
 	https://github.com/searKing/termrk.git \
+	https://github.com/searKing/minimap.git \
 	https://github.com/searKing/tree-view-finder.git \
 	https://github.com/searKing/git-plus.git \
 	https://github.com/searKing/pretty-json.git \

@@ -11,13 +11,14 @@
     invisibles: {}
     fontSize: 13
     tabLength: 4
+  "atom-chs-menu": {}
   "atom-ctags":
     GotoSymbolKey: [
       "ctrl"
     ]
-  "atom-cscope": {}
+  "javascript-snippets": {}
+  "file-icons": {}
   "vim-mode": {}
-  "android-debugger": {}
   "navigation-history":
     maxNavigationsToRemember: 10000
   "run-in-terminal":
@@ -25,8 +26,12 @@
   Termrk:
     useDefaultKeymap: false
     defaultHeight: 81
-  minimap: {}
+  minimap:
+    scrollAnimation: true
+  "tree-view-finder": {}
   "git-plus": {}
+  "language-marko": {}
+  "pretty-json": {}
   "atom-beautify":
     _analyticsUserId: "2928ffc7-ffea-49e3-b8e1-b91368dee3d1"
     cpp_configPath: "/home/searking/.atom/uncrustify.cfg"
@@ -36,3 +41,5 @@
     java_configPath: "/home/searking/.atom/uncrustify.cfg"
   welcome:
     showOnStartup: true
+  "project-manager": {}
+  "linter-shellcheck": {}
