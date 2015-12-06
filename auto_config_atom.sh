@@ -596,9 +596,11 @@ function auto_config_preference()
 
 	sed "s/\/home\/searking\//\/home\/$(whoami)\//g" $g_preference_output_file_name > "$g_preference_output_file_name".tmp
 	cp "$g_preference_output_file_name".tmp $g_preference_output_file_abs_name
+	ret=$?
+	rm "$g_preference_output_file_name".tmp -Rf
 	#检测是否安装成功msmtp
-	if [ $? -ne 0 ]; then
-		log_error "${LINENO}: cp $g_preference_output_file_name to  $g_preference_output_file_abs_name failed. Exit."
+	if [ $ret -ne 0 ]; then
+		log_error "${LINENO}: cp $g_preference_output_file_name to  $g_preference_output_file_abs_name failed<$ret>. Exit."
 		return 1;
 	fi
 }
