@@ -16,8 +16,12 @@
   'ctrl-f': 'find-and-replace:show'
 #导航
 'atom-text-editor':
+  #source insight
   'alt-b': 'navigation-history:back'
   'alt-g': 'navigation-history:forward'
+  #eclipse
+  'alt-left': 'navigation-history:back'
+  'alt-right': 'navigation-history:forward'
 
 '.platform-linux atom-text-editor':
   #跳转到定义--ctrl+left
@@ -27,12 +31,30 @@
   #Symbol Definition
   #'alt-/': 'atom-cscope:this-global-definition'
   #Jump to Caller
-	'alt-c': 'atom-cscope:find-functions-calling'
-	#Jump to definition
-	'cmd-e': 'atom-cscope:find-this-symbol'
+  'alt-c': 'atom-cscope:find-functions-calling'
+  #Jump to definition
+  'cmd-e': 'atom-cscope:find-this-symbol'
 'atom-workspace':
   'alt-t': 'termrk:toggle'
   'alt-q': 'termrk:close-terminal'
   #find . -name "*.c" -o -name "*.cpp" -o -name "*.h" -o -name "*.hpp" -o -name "*.java" -o -name "*.class" -o -name "*.sh" -o -name "*.cc" > cscope.files
   #cscope -q -R -b -i cscope.files
   #ctags -R
+'.platform-linux':
+  #eclipse
+  'ctrl-shift-r': 'fuzzy-finder:toggle-file-finder'
+'body':
+  #eclipse
+  'ctrl-o': 'atom-ctags:toggle-file-symbols'
+'atom-workspace atom-text-editor:not([mini])':
+  #eclipse
+  'ctrl-shift-c': 'editor:toggle-line-comments'
+  #source insigh
+  #'ctrl-/': 'editor:toggle-line-comments't
+  'ctrl-/': 'project-find:show'#"no-use"
+'atom-workspace atom-text-editor':
+  #'alt-left': 'editor:move-to-previous-subword-boundary'
+  #'alt-right': 'editor:move-to-next-subword-boundary'
+  #eclipse
+  'alt-left': 'navigation-history:back'
+  'alt-right': 'navigation-history:forward'

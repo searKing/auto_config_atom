@@ -1,19 +1,19 @@
 #!/bin/bash
 
 function log_info() {
-	echo "[INFO]$@"
+	echo "[INFO]$*"
 }
 
 function log_debug() {
-	echo "[DEBUG]$@"
+	echo "[DEBUG]$*"
 }
 
 function log_warn() {
-	echo "[WARN]$@"
+	echo "[WARN]$*"
 }
 
 function log_error() {
-	echo "[ERROR]$@"
+	echo "[ERROR]$*"
 }
 
 #使用方法说明
@@ -24,7 +24,7 @@ function usage() {
 	SYNOPSIS
 		source $g_shell_name [命令列表] [文件名]...
 	DESCRIPTION
-		$g_git_wrap_shell_name --自动配置git环境
+		"$g_shell_name" --自动配置git环境
 			-h
 				get help log_info
 			-f
@@ -39,6 +39,22 @@ function usage() {
 				auto install & config atom .
 			refresh
 			 	auto build file indexes for cscope & ctags
+	TIPS
+	  #source insight
+	  'alt-b': 'navigation-history:back'
+	  'alt-g': 'navigation-history:forward'
+	  'alt-c': 'atom-cscope:find-functions-calling'
+	  'ctrl-/': 'project-find:show'#"no-use"
+	  #eclipse
+	  'alt-left': 'navigation-history:back'
+	  'alt-right': 'navigation-history:forward'
+	  'cmd-e': 'atom-cscope:find-this-symbol'
+	  'ctrl-shift-r': 'fuzzy-finder:toggle-file-finder'
+	  'ctrl-o': 'atom-ctags:toggle-file-symbols'
+	  'ctrl-shift-c': 'editor:toggle-line-comments'
+	  #diy
+	  'alt-t': 'termrk:toggle'
+	  'alt-q': 'termrk:close-terminal'
 	AUTHOR 作者
     	由 searKing Chan 完成。
 
@@ -139,7 +155,9 @@ function set_default_cfg_param(){
 	cabal-install \
 	python-pip \
 	python-dev \
-	build-essential"
+	build-essential \
+	shellcheck \
+	gnome-terminal"
   	#app插件名
   	g_addon_names="atom-chs-menu \
 	atom-ctags \
@@ -148,7 +166,7 @@ function set_default_cfg_param(){
 	file-icons \
 	vim-mode \
 	navigation-history \
-	Termrk \
+	atom-terminal \
 	minimap \
 	minimap-autohide \
 	minimap-bookmarks \
@@ -167,7 +185,7 @@ function set_default_cfg_param(){
 	pretty-json \
 	language-marko \
 	atom-beautify \
-	project-manager \
+	linter \
 	linter-shellcheck"
   	#app插件git地址，与g_addon_names一一对应
 	g_addon_urns="https://github.com/searKing/atom-chs-menu.git \
@@ -177,7 +195,7 @@ function set_default_cfg_param(){
 	https://github.com/searKing/file-icons.git \
 	https://github.com/searKing/vim-mode.git \
 	https://github.com/searKing/navigation-history.git \
-	https://github.com/searKing/termrk.git \
+	https://github.com/searKing/atom-terminal.git \
 	https://github.com/searKing/minimap.git \
 	https://github.com/searKing/minimap-autohide.git \
 	https://github.com/searKing/minimap-bookmarks.git \
@@ -195,7 +213,7 @@ function set_default_cfg_param(){
 	https://github.com/searKing/pretty-json.git \
 	https://github.com/searKing/atom-language-marko.git \
 	https://github.com/searKing/atom-beautify.git \
-	https://github.com/searKing/atom-project-manager.git \
+	https://github.com/searKing/linter.git \
 	https://github.com/searKing/linter-shellcheck.git"
 
 	#gem 安装的ruby包
@@ -210,9 +228,9 @@ function set_default_cfg_param(){
 #设置默认变量参数
 function set_default_var_param(){
 	#获取当前脚本短路径名称
-	g_shell_name="$(basename $0)"
+	g_shell_name="$(basename "$0")"
 	#切换并获取当前脚本所在路径
-	g_shell_repositories_abs_dir="$(cd `dirname $0`; pwd)"
+	g_shell_repositories_abs_dir="$(cd "$(dirname "$0")" ; pwd)"
 	#当前动作
 	g_wrap_action=""
 	#需刷新的项目文件夹地址--默认即当前shell脚本所在路径
@@ -261,8 +279,8 @@ HELPEOF
 		esac
 	done
 	#去除options参数
-	shift $(($OPTIND - 1))
-
+	#shift $(( $OPTIND - 1 ))
+	shift $(( OPTIND - 1 ))
 	if [ "$#" -lt 1 ]; then
 		cat << HELPEOF
 use option -h to get more log_information .
@@ -302,7 +320,7 @@ function install_dpkg_app_from_local()
 		sudo dpkg -i "$app_urn"
 		ret=$?
 		if [ $ret -ne 0 ]; then
-			log_error "${LINENO}: install "$app_name" from "$app_urn" failed<$ret>. Exit."
+			log_error "$LINENO: install $app_name from $app_urn failed<$ret>. Exit."
 			return 1
     	fi
 	fi
@@ -324,10 +342,10 @@ function install_dpkg_app_from_internet()
 		which "$app_name"	1>/dev/null
 	fi
 	if [ $? -ne 0 ]; then
-		wget -c "$app_urn" -O $app_name
+		wget -c "$app_urn" -O "$app_name"
 		ret=$?
 		if [ $ret -ne 0 ]; then
-			log_error "${LINENO}: wget "$app_name" from "$app_urn" failed<$ret>. Exit."
+			log_error "${LINENO}: wget $app_name from $app_urn failed<$ret>. Exit."
 			return 1;
 		fi
 	fi
@@ -357,7 +375,7 @@ function install_apt_app_from_ubuntu()
 		sudo apt-get install -y "$app_name"
 		ret=$?
 		if [ $ret -ne 0 ]; then
-			log_error "${LINENO}: install "$app_name" failed<$ret>. Exit."
+			log_error "${LINENO}: install $app_name failed<$ret>. Exit."
 			return 1;
 		fi
 	fi
@@ -383,7 +401,7 @@ function install_addon_from_atom()
 		apm install -q "$addon_name"
 		ret=$?
 		if [ $ret -ne 0 ]; then
-			log_error "${LINENO}: apm install "$addon_name" failed<$ret>. Exit."
+			log_error "${LINENO}: apm install $addon_name failed<$ret>. Exit."
 			return 1;
 		fi
 	fi
@@ -403,7 +421,15 @@ function install_addon_from_git()
 	addon_abs_full_name="$g_addon_abs_root_path/$addon_name"
 	#切换到插件packages目录
 	cd "$g_addon_abs_root_path"/
-	contain_name=$(ls |grep -i "$1")
+	dir_names=$(ls)
+	contain_name=0
+	for dir_name in $dir_names ; do
+		if [[ "$dir_name"x == "$addon_name"x ]]; then
+			contain_name=1
+			break
+		fi
+	done
+	#contain_name=$(ls |grep -i "$addon_name")
 	#检测是否安装成功msmtp
 	addon_installed=0
 	if [[ ( -d $addon_abs_full_name ) || ( "$contain_name"x != ""x ) ]]; then
@@ -414,10 +440,12 @@ function install_addon_from_git()
 		git clone "$addon_urn"
 		ret=$?
 		if [ $ret -ne 0 ]; then
-			log_error "${LINENO}: apm install "$addon_name" failed<$ret>. Exit."
+			log_error "${LINENO}: apm install $addon_name failed<$ret>. Exit."
+			cd -
 			return 1;
 		fi
 	fi
+	cd -
 }
 #切换ruby版本
 function switch_ruby_version_if_lessthan_2_0()
@@ -429,10 +457,10 @@ function switch_ruby_version_if_lessthan_2_0()
 	fi
 	deault_version_number=$1
 	#检测当前ruby版本
-	ruby_link=$(ls -l "`which ruby`")
+	ruby_link=$(ls -l "$(which ruby)")
 	#>=2.0 不切换，因为atom需要最低2.0
-	if [[ ( "$ruby_link"x =~ "ruby0" ) \
-		|| ( "$ruby_link"x =~ "ruby1" ) ]]; then
+	if [[ ( "$ruby_link"x =~ ruby0 ) \
+		|| ( "$ruby_link"x =~ ruby1 ) ]]; then
 		#检测默认要求版本是否存在
 		ruby_new_link=$(which "ruby$deault_version_number")
 		if [[ "$ruby_new_link"x == ""x ]]; then
@@ -441,13 +469,13 @@ function switch_ruby_version_if_lessthan_2_0()
 			return 1;
 		fi
 		#若ruby版本存在且满足要求，则切换之
-		sudo ln -sb ruby"$version_number" $(which ruby)
-		sudo ln -sf gem"$version_number" 	$(which gem)
-		sudo ln -sf erb"$version_number" 	$(which erb)
-		sudo ln -sf irb"$version_number" 	$(which irb)
-		sudo ln -sf rake"$version_number" $(which rake)
-		sudo ln -sf rdoc"$version_number" $(which rdoc)
-		sudo ln -sf testrb"$version_number" $(which testrb)
+		sudo ln -sb ruby"$deault_version_number" 	"$(which ruby)"
+		sudo ln -sf gem"$deault_version_number" 	"$(which gem)"
+		sudo ln -sf erb"$deault_version_number" 	"$(which erb)"
+		sudo ln -sf irb"$deault_version_number" 	"$(which irb)"
+		sudo ln -sf rake"$deault_version_number" 	"$(which rake)"
+		sudo ln -sf rdoc"$deault_version_number"	"$(which rdoc)"
+		sudo ln -sf testrb"$deault_version_number" 	"$(which testrb)"
 		sudo gem update --system
 		sudo gem pristine --all
 	fi
@@ -489,8 +517,8 @@ function install_app_from_ruby()
 			gem sources --remove https://ruby.taobao.org/
 			gem sources -a https://rubygems.org/
 			if [[ $ret -ne 0 ]]; then
-				log_error "${LINENO}: gem install "$app_name" failed<$ret>. Exit."
-				return 1;
+				log_error "${LINENO}: gem install app_name failed<$ret>. Exit."
+				return 1
 			fi
 		fi
 	fi
@@ -515,7 +543,7 @@ function install_app_from_haskell()
 		cabal install "$app_name"
 		ret=$?
 		if [ $ret -ne 0 ]; then
-			log_error "${LINENO}: gem install "$app_name" failed<$ret>. Exit."
+			log_error "${LINENO}: gem install $app_name failed<$ret>. Exit."
 			return 1;
 		fi
 	fi
@@ -540,7 +568,7 @@ function install_app_from_python()
 		pip install --upgrade "$app_name"
 		ret=$?
 		if [ $ret -ne 0 ]; then
-			log_error "${LINENO}: gem install "$app_name" failed<$ret>. Exit."
+			log_error "${LINENO}: gem install $app_name failed<$ret>. Exit."
 			return 1;
 		fi
 	fi
@@ -549,24 +577,24 @@ function install_app_from_python()
 #自动配置快捷键映射
 function auto_config_keymap()
 {
-	if [ -f $g_keymap_output_file_abs_name ]; then
+	if [ -f "$g_keymap_output_file_abs_name" ]; then
 	   	if [ $g_cfg_force_mode -eq 0 ]; then
-			log_error "${LINENO}:"$g_keymap_output_file_abs_name" files is already exist. use -f to override? Exit."
+			log_error "${LINENO}:$g_keymap_output_file_abs_name files is already exist. use -f to override? Exit."
 			return 1
 		else
 			mv "$g_keymap_output_file_abs_name" "$g_keymap_output_file_abs_name".bak
     	fi
   	else
       config_file_dir=${g_keymap_output_file_abs_name%/*}
-      if [ ! -d $config_file_dir ]; then
+      if [ ! -d "$config_file_dir" ]; then
         mkdir -p "$config_file_dir"
       fi
   	fi
 	if [[ ! -f $g_keymap_output_file_name ]]; then
-		log_error "${LINENO}:"$g_keymap_output_file_abs_name" files is not exist. use git clone to reload? Exit."
+		log_error "${LINENO}:$g_keymap_output_file_name files is not exist. use git clone to reload? Exit."
 		return 1
 	fi
-	cp $g_keymap_output_file_name $g_keymap_output_file_abs_name
+	cp "$g_keymap_output_file_name" "$g_keymap_output_file_abs_name"
 	#检测是否安装成功msmtp
 	if [ $? -ne 0 ]; then
 		log_error "${LINENO}: cp $g_keymap_output_file_name to  $g_keymap_output_file_abs_name failed. Exit."
@@ -576,26 +604,26 @@ function auto_config_keymap()
 #自动配置偏好信息
 function auto_config_preference()
 {
-	if [ -f $g_preference_output_file_abs_name ]; then
+	if [ -f "$g_preference_output_file_abs_name" ]; then
 	   	if [ $g_cfg_force_mode -eq 0 ]; then
-			log_error "${LINENO}:"$g_preference_output_file_abs_name" files is already exist. use -f to override? Exit."
+			log_error "${LINENO}:$g_preference_output_file_abs_name files is already exist. use -f to override? Exit."
 			return 1
 		else
 			mv "$g_preference_output_file_abs_name" "$g_preference_output_file_abs_name".bak
     	fi
 	else
 		config_file_dir=${g_preference_output_file_abs_name%/*}
-		if [ ! -d $config_file_dir ]; then
+		if [ ! -d "$config_file_dir" ]; then
 			mkdir -p "$config_file_dir"
 		fi
   	fi
 	if [[ ! -f $g_preference_output_file_name ]]; then
-		log_error "${LINENO}:"$g_preference_output_file_name" files is not exist. use git clone to reload? Exit."
+		log_error "${LINENO}:$g_preference_output_file_name files is not exist. use git clone to reload? Exit."
 		return 1
 	fi
 
 	sed "s/\/home\/searking\//\/home\/$(whoami)\//g" $g_preference_output_file_name > "$g_preference_output_file_name".tmp
-	cp "$g_preference_output_file_name".tmp $g_preference_output_file_abs_name
+	cp "$g_preference_output_file_name".tmp "$g_preference_output_file_abs_name"
 	ret=$?
 	rm "$g_preference_output_file_name".tmp -Rf
 	#检测是否安装成功msmtp
@@ -607,24 +635,24 @@ function auto_config_preference()
 #自动配置uncrustify格式化信息
 function auto_config_uncrustify()
 {
-	if [ -f $g_uncrustify_output_file_abs_name ]; then
+	if [ -f "$g_uncrustify_output_file_abs_name" ]; then
 	   	if [ $g_cfg_force_mode -eq 0 ]; then
-			log_error "${LINENO}:"$g_uncrustify_output_file_abs_name" files is already exist. use -f to override? Exit."
+			log_error "${LINENO}:$g_uncrustify_output_file_abs_name files is already exist. use -f to override? Exit."
 			return 1
 		else
 			mv "$g_uncrustify_output_file_abs_name" "$g_uncrustify_output_file_abs_name".bak
 		fi
 	else
 		config_file_dir=${g_uncrustify_output_file_abs_name%/*}
-		if [ ! -d $config_file_dir ]; then
+		if [ ! -d "$config_file_dir" ]; then
 			mkdir -p "$config_file_dir"
 		fi
 	fi
-	if [[ ! -f $g_uncrustify_output_file_name ]]; then
-		log_error "${LINENO}:"$g_uncrustify_output_file_name" files is not exist. use git clone to reload? Exit."
+	if [[ ! -f "$g_uncrustify_output_file_name" ]]; then
+		log_error "${LINENO}:$g_uncrustify_output_file_name files is not exist. use git clone to reload? Exit."
 		return 1
 	fi
-	cp $g_uncrustify_output_file_name $g_uncrustify_output_file_abs_name
+	cp "$g_uncrustify_output_file_name" "$g_uncrustify_output_file_abs_name"
 	#检测是否安装成功msmtp
 	if [ $? -ne 0 ]; then
 		log_error "${LINENO}: cp $g_uncrustify_output_file_name to  $g_uncrustify_output_file_abs_name failed. Exit."
@@ -662,6 +690,13 @@ just press <ctrl-c> to ignore the current addon, \
 this add_on will be installed from git automatically later. easy easy"
 	#安装addon应用
 	call_func_serializable install_addon_from_atom "$g_addon_names"
+	if [[ $? -ne 0 ]]; then
+		return 1
+	fi
+
+	log_info "${LINENO}:install_addon_from_git start. "
+	#安装addon应用
+	call_func_serializable install_addon_from_git "$g_addon_urns"
 	if [[ $? -ne 0 ]]; then
 		return 1
 	fi
@@ -718,7 +753,7 @@ function refresh(){
 		log_error "${LINENO}:refresh path<$g_refresh_dir> must be a dir. EXIT"
 		return 1
 	fi
-	cd $g_refresh_dir
+	cd "$g_refresh_dir"
 	find . -name "*.c" -o -name "*.cpp" -o -name "*.h" -o -name "*.hpp" -o -name "*.java" -o -name "*.class" -o -name "*.sh" -o -name "*.cc" > cscope.files
 	ret=$?
 	if [ $ret -ne 0 ]; then
@@ -766,7 +801,7 @@ function shell_wrap()
 	if [ $? -ne 0 ]; then
 		return 1
 	fi
-	log_info "$0 $@ is running successfully"
+	log_info "$0 $* is running successfully, restart the atom to ensure the config to make effect"
 	read -n1 -p "Press any key to continue..."
 	return 0
 }

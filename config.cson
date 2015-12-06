@@ -4,7 +4,6 @@
   core:
     disabledPackages: [
       "symbols-view"
-      "run-in-terminal"
     ]
     audioBeep: false
   editor:
@@ -15,16 +14,12 @@
     GotoSymbolKey: [
       "ctrl"
     ]
+    autoBuildTagsWhenActive: true
   "atom-cscope": {}
   "vim-mode": {}
   "android-debugger": {}
   "navigation-history":
     maxNavigationsToRemember: 10000
-  "run-in-terminal":
-    save_before_launch: false
-  Termrk:
-    useDefaultKeymap: false
-    defaultHeight: 81
   minimap:
     scrollAnimation: true
     plugins:
@@ -47,6 +42,11 @@
     cs_configPath: "/home/searking/.atom/uncrustify.cfg"
     arduino_configPath: "/home/searking/.atom/uncrustify.cfg"
     java_configPath: "/home/searking/.atom/uncrustify.cfg"
-  welcome:
-    showOnStartup: false
   "minimap-codeglance": {}
+  "linter-shellcheck":
+    enableNotice: true
+  "atom-terminal":
+    app: "/usr/bin/gnome-terminal"
+    args: "--title=\"gnome-terminal-on-atom\""
+  linter:
+    showErrorTabLine: true
