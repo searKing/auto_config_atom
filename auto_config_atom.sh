@@ -427,17 +427,20 @@ function switch_ruby_version_if_lessthan_2_0()
 		log_error "${LINENO}:$FUNCNAME expercts $expected_params_in_num param_in, but receive only $#. EXIT"
 		return 1;
 	fi
-	version_number=$1
-	ruby_new_link=$(which "ruby$version_number")
-	if [[ "$ruby_new_link"x == ""x ]]; then
-		log_error "${LINENO}:$FUNCNAME: ruby$version_number is not installed yet. EXIT"
-		return 1;
-	fi
+	deault_version_number=$1
 	#检测当前ruby版本
 	ruby_link=$(ls -l "`which ruby`")
 	#>=2.0 不切换，因为atom需要最低2.0
 	if [[ ( "$ruby_link"x =~ "ruby0" ) \
 		|| ( "$ruby_link"x =~ "ruby1" ) ]]; then
+		#检测默认要求版本是否存在
+		ruby_new_link=$(which "ruby$deault_version_number")
+		if [[ "$ruby_new_link"x == ""x ]]; then
+			log_error "${LINENO}:$FUNCNAME: ruby$deault_version_number is not installed yet. \
+			try to install a ruby version higher than 2.0 mannauly please.EXIT"
+			return 1;
+		fi
+		#若ruby版本存在且满足要求，则切换之
 		sudo ln -sb ruby"$version_number" $(which ruby)
 		sudo ln -sf gem"$version_number" 	$(which gem)
 		sudo ln -sf erb"$version_number" 	$(which erb)
