@@ -441,11 +441,11 @@ function install_addon_from_git()
 		ret=$?
 		if [ $ret -ne 0 ]; then
 			log_error "${LINENO}: apm install $addon_name failed<$ret>. Exit."
-			cd -
+			cd - &>/dev/null
 			return 1;
 		fi
 	fi
-	cd -
+	cd - &>/dev/null
 }
 #切换ruby版本
 function switch_ruby_version_if_lessthan_2_0()
@@ -758,24 +758,24 @@ function refresh(){
 	ret=$?
 	if [ $ret -ne 0 ]; then
 		log_error "${LINENO}:generate cscope.files failed : $ret"
-		cd -
+		cd - &>/dev/null
 		return 1
 	fi
 	cscope -q -R -b -i cscope.files
 	ret=$?
 	if [ $ret -ne 0 ]; then
 		log_error "${LINENO}:cscope run failed : $ret"
-		cd -
+		cd - &>/dev/null
 		return 1
 	fi
 	ctags -R
 	ret=$?
 	if [ $ret -ne 0 ]; then
 		log_error "${LINENO}:ctags run failed : $ret"
-		cd -
+		cd - &>/dev/null
 		return 1
 	fi
-	cd -
+	cd - &>/dev/null
 }
 function do_work(){
 	call_func_serializable "$g_wrap_action"
