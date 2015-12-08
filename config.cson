@@ -5,12 +5,17 @@
     disabledPackages: [
       "symbols-view"
     ]
-    audioBeep: false    
+    audioBeep: false
     ignoredNames: [
       ".git"
       ".hg"
       ".svn"
+      ".tags*"
       "*.o"
+      "*.so"
+      "*.a"
+      "*.class"
+      "*.jar"
       "*~"
       ".rar"
     ]
