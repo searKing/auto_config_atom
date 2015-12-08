@@ -5,7 +5,15 @@
     disabledPackages: [
       "symbols-view"
     ]
-    audioBeep: false
+    audioBeep: false    
+    ignoredNames: [
+      ".git"
+      ".hg"
+      ".svn"
+      "*.o"
+      "*~"
+      ".rar"
+    ]
   editor:
     invisibles: {}
     fontSize: 13
