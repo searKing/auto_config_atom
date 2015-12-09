@@ -20,11 +20,16 @@ function _atom_autocomplete
     -p | -o)
     	#定位当前目录的文件
     	#http://cnswww.cns.cwru.edu/php/chet/bash/NEWS.
-        COMPREPLY=( $(compgen -o default -o plusdirs -f -- $cur) )
+        COMPREPLY=( $(compgen -o default -o plusdirs -f -- "$cur") )
+        return 0
+        ;;
+    -t)
+        #atom版本发布类型
+        COMPREPLY=( $(compgen -W "stable beta" -- "$cur" ))
         return 0
         ;;
     -f)
-        COMPREPLY=( $(compgen -W "init refresh -o -p" -- $cur ))
+        COMPREPLY=( $(compgen -W "init refresh -o -p" -- "$cur" ))
         return 0
         ;;
     *)
@@ -33,13 +38,13 @@ function _atom_autocomplete
             return 0
         fi
         if [ "$prev2"x == "-p"x ]; then
-        	COMPREPLY=( $(compgen -W "refresh" -- $cur ))
+        	COMPREPLY=( $(compgen -W "refresh" -- "$cur" ))
         	return 0
         fi
         ;;
     esac
 
-    COMPREPLY=( $(compgen -W "$opts" -- $cur) )
+    COMPREPLY=( $(compgen -W "$opts" -- "$cur") )
     return 0
 }
 #调用auto_config_atom.sh命令，则会调用-F指定的补全函数_atom_autocomplete
