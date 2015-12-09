@@ -31,6 +31,8 @@ function usage() {
 				force mode to override exist file of the same name
 			-v
 				verbose display
+			-t
+				atom release type: stable(default) or beta
 			-o
 				the path of the output config files
 			-p
@@ -121,6 +123,12 @@ function call_func_serializable()
 }
 #设置默认配置参数
 function set_default_cfg_param(){
+
+	#获取当前脚本短路径名称
+	g_shell_name="$(basename "$0")"
+	#切换并获取当前脚本所在路径
+	g_shell_repositories_abs_dir="$(cd "$(dirname "$0")" ; pwd)"
+
 	#覆盖前永不提示-f
 	g_cfg_force_mode=0
 	cd ~
@@ -130,14 +138,12 @@ function set_default_cfg_param(){
 
 	#是否显示详细信息
 	g_cfg_visual=0
+	#atom主程序发布版本
+	g_cfg_release_type="stable"
 	#配置文件名称
 	g_keymap_output_file_name="keymap.cson"
   	g_preference_output_file_name="config.cson"
   	g_uncrustify_output_file_name="uncrustify.cfg"
-  	#atom主程序名
-  	g_atom_app_name="atom"
-  	#atom主程序下载地址
-  	g_atom_deb_urn="https://atom.io/download/deb"
   	#atom插件所依赖应用名
 	#atom-ctags			ctags
 	#atom-cscope		cscope
@@ -224,17 +230,30 @@ function set_default_cfg_param(){
 
 	#pip 安装的python包
 	g_pip_app_names="pip virtualenv autopep8"
-}
-#设置默认变量参数
-function set_default_var_param(){
-	#获取当前脚本短路径名称
-	g_shell_name="$(basename "$0")"
-	#切换并获取当前脚本所在路径
-	g_shell_repositories_abs_dir="$(cd "$(dirname "$0")" ; pwd)"
+
 	#当前动作
 	g_wrap_action=""
+}
+#设置默认变量参数
+function set_var_param(){
+
+  	#atom主程序名
+	if [[ "$g_cfg_release_type"x =~ [Ss][Tt][Aa][Bb][Ll][Ee]x ]]; then
+  		g_atom_app_name="atom"
+	else
+  		g_atom_app_name="atom-beta"
+	fi
+  	#atom主程序下载地址
+  	g_atom_deb_urn="https://atom.io/download/deb?channel=$g_cfg_release_type"
+	#默认插件安装路径
+	g_addon_abs_root_path="$g_cfg_output_root_dir/packages"
 	#需刷新的项目文件夹地址--默认即当前shell脚本所在路径
 	g_refresh_dir="$g_shell_repositories_abs_dir"
+
+	#默认配置文件绝对路径
+	g_keymap_output_file_abs_name="$g_cfg_output_root_dir/$g_keymap_output_file_name"
+	g_preference_output_file_abs_name="$g_cfg_output_root_dir/$g_preference_output_file_name"
+	g_uncrustify_output_file_abs_name="$g_cfg_output_root_dir/$g_uncrustify_output_file_name"
 }
 #解析输入参数
 function parse_params_in() {
@@ -245,9 +264,8 @@ HELPEOF
 		return 1
 	fi
 	set_default_cfg_param #设置默认配置参数
-	set_default_var_param #设置默认变量参数
 	unset OPTIND
-	while getopts "vp:fo:h" opt
+	while getopts "vp:fo:t:h" opt
 	do
 		case $opt in
 		f)
@@ -261,6 +279,10 @@ HELPEOF
 		v)
 			#是否显示详细信息
 			g_cfg_visual=1
+			;;
+		t)
+			#atom主程序发布版本
+			g_cfg_release_type=$OPTARG
 			;;
 		p)
 			#需刷新的项目文件夹地址
@@ -289,12 +311,9 @@ HELPEOF
 	fi
 	#获取当前动作
 	g_wrap_action="$1"
-	#默认插件安装路径
-	g_addon_abs_root_path="$g_cfg_output_root_dir/packages"
-	#默认配置文件绝对路径
-	g_keymap_output_file_abs_name="$g_cfg_output_root_dir/$g_keymap_output_file_name"
-	g_preference_output_file_abs_name="$g_cfg_output_root_dir/$g_preference_output_file_name"
-	g_uncrustify_output_file_abs_name="$g_cfg_output_root_dir/$g_uncrustify_output_file_name"
+
+	set_var_param #设置默认变量参数
+
 }
 
 
