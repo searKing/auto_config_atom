@@ -6,23 +6,29 @@
       "symbols-view"
     ]
     audioBeep: false
+    fileEncoding: "gbk"
     ignoredNames: [
       ".git"
       ".hg"
       ".svn"
+      ".DS_Store"
+      "._*"
+      "Thumbs.db"
+      "*~"
       ".tags*"
       "*.o"
       "*.so"
       "*.a"
       "*.class"
       "*.jar"
-      "*~"
-      ".rar"
+      "*.rar"
+      "*.zip"
     ]
   editor:
     invisibles: {}
     fontSize: 13
     tabLength: 4
+    backUpBeforeSaving: true
   "atom-ctags":
     GotoSymbolKey: [
       "ctrl"
@@ -63,3 +69,5 @@
     args: "--title=\"gnome-terminal-on-atom\""
   linter:
     showErrorTabLine: true
+  welcome:
+    showOnStartup: true
