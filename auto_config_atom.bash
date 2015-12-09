@@ -10,26 +10,30 @@ function _atom_autocomplete
     COMPREPLY=()
     cur="${COMP_WORDS[COMP_CWORD]}"
     prev="${COMP_WORDS[COMP_CWORD-1]}"
-    opts="init refresh -h -f -v -o -p"
+    opts="init refresh -h -f -v -t -o -p"
 
     case "$prev" in
     init | refresh)
         COMPREPLY=()
         return 0
         ;;
-    -p | -o)
-    	#定位当前目录的文件
+    "-p"|"-o")
+    	#定位当前目录的文件夹
     	#http://cnswww.cns.cwru.edu/php/chet/bash/NEWS.
-        COMPREPLY=( $(compgen -o default -o plusdirs -f -- "$cur") )
+        COMPREPLY=( $(compgen -o dirnames -- "$cur") )
         return 0
         ;;
-    -t)
+    "-t")
         #atom版本发布类型
         COMPREPLY=( $(compgen -W "stable beta" -- "$cur" ))
         return 0
         ;;
-    -f)
-        COMPREPLY=( $(compgen -W "init refresh -o -p" -- "$cur" ))
+    "-f")
+        COMPREPLY=( $(compgen -W "init refresh -o -p -v" -- "$cur" ))
+        return 0
+        ;;
+    "-v")
+        COMPREPLY=( $(compgen -W "init refresh -o -p -f" -- "$cur" ))
         return 0
         ;;
     *)
@@ -39,6 +43,10 @@ function _atom_autocomplete
         fi
         if [ "$prev2"x == "-p"x ]; then
         	COMPREPLY=( $(compgen -W "refresh" -- "$cur" ))
+        	return 0
+        fi
+        if [ "$prev2"x == "-t"x ]; then
+        	COMPREPLY=( $(compgen -W "init -f -v -o" -- "$cur" ))
         	return 0
         fi
         ;;
