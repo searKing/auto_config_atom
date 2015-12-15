@@ -192,7 +192,8 @@ function set_default_cfg_param(){
 	language-marko \
 	atom-beautify \
 	linter \
-	linter-shellcheck"
+	linter-shellcheck \
+	atom-markdown-mindmap"
   	#app插件git地址，与g_addon_names一一对应
 	g_addon_urns="https://github.com/searKing/atom-chs-menu.git \
 	https://github.com/searKing/atom-ctags.git \
@@ -220,7 +221,8 @@ function set_default_cfg_param(){
 	https://github.com/searKing/atom-language-marko.git \
 	https://github.com/searKing/atom-beautify.git \
 	https://github.com/searKing/linter.git \
-	https://github.com/searKing/linter-shellcheck.git"
+	https://github.com/searKing/linter-shellcheck.git \
+	https://github.com/searKing/atom-markdown-mindmap.git"
 
 	#gem 安装的ruby包
 	g_gem_app_names="ruby-beautify \
@@ -451,10 +453,10 @@ function install_addon_from_git()
 	#contain_name=$(ls |grep -i "$addon_name")
 	#检测是否安装成功msmtp
 	addon_installed=0
-	if [[ ( -d $addon_abs_full_name ) || ( "$contain_name"x != ""x ) ]]; then
+	if [[ ( -d $addon_abs_full_name ) || ( $contain_name -ne 0 ) ]]; then
 		addon_installed=1
 	fi
-
+	
 	if [ $addon_installed -eq 0 ]; then
 		git clone "$addon_urn"
 		ret=$?
