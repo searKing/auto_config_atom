@@ -4,9 +4,9 @@
   core:
     disabledPackages: [
       "symbols-view"
+      "markdown-preview"
     ]
     audioBeep: false
-    fileEncoding: "gbk"
     ignoredNames: [
       ".git"
       ".hg"
@@ -38,16 +38,19 @@
       "*.rar"
       "*.zip"
     ]
+    destroyEmptyPanes: false
   editor:
     invisibles: {}
     fontSize: 13
     tabLength: 4
     backUpBeforeSaving: true
+    fontFamily: "Microsoft YaHei"
   "atom-ctags":
     GotoSymbolKey: [
       "ctrl"
     ]
     autoBuildTagsWhenActive: true
+    buildTimeout: 300000
   "atom-cscope": {}
   "vim-mode": {}
   "android-debugger": {}
@@ -84,4 +87,6 @@
   linter:
     showErrorTabLine: true
   welcome:
-    showOnStartup: true
+    showOnStartup: false
+  "markdown-writer": {}
+  "markdown-preview-plus": {}

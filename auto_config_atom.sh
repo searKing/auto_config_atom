@@ -192,7 +192,12 @@ function set_default_cfg_param(){
 	language-marko \
 	atom-beautify \
 	linter \
-	linter-shellcheck "
+	linter-shellcheck \
+	markdown-writer \
+	tidy-markdown \
+	linter-markdown \
+	markdown-scroll-sync \
+	markdown-preview-plus"
   	#app插件git地址，与g_addon_names一一对应
 	g_addon_urns="https://github.com/searKing/atom-chs-menu.git \
 	https://github.com/searKing/atom-ctags.git \
@@ -220,7 +225,12 @@ function set_default_cfg_param(){
 	https://github.com/searKing/atom-language-marko.git \
 	https://github.com/searKing/atom-beautify.git \
 	https://github.com/searKing/linter.git \
-	https://github.com/searKing/linter-shellcheck.git "
+	https://github.com/searKing/linter-shellcheck.git \
+	https://github.com/searKing/md-writer.git \
+	https://github.com/searKing/atom-tidy-markdown.git \
+	https://github.com/searKing/linter-markdown.git \
+	https://github.com/searKing/markdown-scroll-sync.git \
+	https://github.com/searKing/markdown-preview-plus.git"
 
 	#gem 安装的ruby包
 	g_gem_app_names="ruby-beautify \
