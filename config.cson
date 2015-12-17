@@ -38,7 +38,6 @@
       "*.rar"
       "*.zip"
     ]
-    destroyEmptyPanes: false
   editor:
     invisibles: {}
     fontSize: 13
@@ -51,7 +50,9 @@
     ]
     autoBuildTagsWhenActive: true
     buildTimeout: 300000
-  "atom-cscope": {}
+    cmdArgs: "--exclude=*~ --exclude=*.class --exclude=~* --exclude=.git/ --exclude=.tags[0-9]* --exclude=tags --exclude=cscope.files  --exclude=cscope.in.out  --exclude=cscope.out  --exclude=cscope.po.out"
+  "atom-cscope":
+    cscopeSourceFiles: ".c .cc .cpp .h .hpp .java"
   "vim-mode": {}
   "android-debugger": {}
   "navigation-history":
