@@ -38,6 +38,10 @@
       "*.jar"
       "*.rar"
       "*.zip"
+      "cscope.out"
+      "cscope.in.out"
+      "cscope.in.files"
+      "cscope.po.out"
     ]
   editor:
     invisibles: {}
