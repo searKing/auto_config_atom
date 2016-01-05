@@ -5,6 +5,7 @@
     disabledPackages: [
       "symbols-view"
       "markdown-preview"
+      "tidy-markdown"
     ]
     audioBeep: false
     fileEncoding: "gbk"
@@ -16,6 +17,8 @@
       "._*"
       "[Tt]humbs.db"
       "*~"
+      "tags"
+      ".tags"
       ".tags[0-9]*"
       "*.o"
       "*.lo"
@@ -38,6 +41,7 @@
       "*.jar"
       "*.rar"
       "*.zip"
+      "cscope.files"
       "cscope.out"
       "cscope.in.out"
       "cscope.in.files"
