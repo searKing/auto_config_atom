@@ -5,7 +5,6 @@
     disabledPackages: [
       "symbols-view"
       "markdown-preview"
-      "tidy-markdown"
     ]
     audioBeep: false
     fileEncoding: "gbk"
@@ -104,3 +103,4 @@
   "tree-view":
     hideIgnoredNames: true
     hideVcsIgnoredFiles: true
+  "tidy-markdown": {}
