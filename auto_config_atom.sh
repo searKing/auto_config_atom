@@ -194,7 +194,7 @@ function set_default_cfg_param(){
 	linter \
 	linter-shellcheck \
 	markdown-writer \
-	tidy-markdown \
+	# tidy-markdown \
 	linter-markdown \
 	markdown-scroll-sync \
 	markdown-preview-plus"
@@ -227,7 +227,7 @@ function set_default_cfg_param(){
 	https://github.com/searKing/linter.git \
 	https://github.com/searKing/linter-shellcheck.git \
 	https://github.com/searKing/md-writer.git \
-	https://github.com/searKing/atom-tidy-markdown.git \
+	# https://github.com/searKing/atom-tidy-markdown.git \
 	https://github.com/searKing/linter-markdown.git \
 	https://github.com/searKing/markdown-scroll-sync.git \
 	https://github.com/searKing/markdown-preview-plus.git"
@@ -474,7 +474,7 @@ function install_addon_from_git()
 			return 1;
 		fi
 		#tidy-markdown等addon需要在包目录再本地安装一下
-		bash -c "cd $addon_name;apm install"		
+		bash -c "cd $addon_name;apm install"
 	fi
 	cd - &>/dev/null
 }

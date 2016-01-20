@@ -7,7 +7,7 @@
       "markdown-preview"
     ]
     audioBeep: false
-    fileEncoding: "gbk"
+    fileEncoding: "utf-8"
     ignoredNames: [
       ".git"
       ".hg"
@@ -103,4 +103,4 @@
   "tree-view":
     hideIgnoredNames: true
     hideVcsIgnoredFiles: true
-  "tidy-markdown": {}
+  # "tidy-markdown": {}
