@@ -198,7 +198,11 @@ function set_default_cfg_param(){
 	linter-markdown \
 	markdown-scroll-sync \
 	markdown-preview-plus \
-	atom-shortcuts"
+	atom-shortcuts \
+	# hyperclick \
+	# autocomplete-python \
+	python-tools \
+	eclipse-keybindings"
   	#app插件git地址，与g_addon_names一一对应
 	g_addon_urns="https://github.com/searKing/atom-chs-menu.git \
 	https://github.com/searKing/atom-ctags.git \
@@ -232,7 +236,11 @@ function set_default_cfg_param(){
 	https://github.com/searKing/linter-markdown.git \
 	https://github.com/searKing/markdown-scroll-sync.git \
 	https://github.com/searKing/markdown-preview-plus.git \
-	https://github.com/searKing/atom-shortcuts.git"
+	https://github.com/searKing/atom-shortcuts.git \
+	# https://github.com/searKing/hyperclick.git \
+	# https://github.com/searKing/autocomplete-python.git \
+	https://github.com/searKing/python-tools.git \
+	https://github.com/searKing/eclipse-keybindings.git"
 
 	#gem 安装的ruby包
 	g_gem_app_names="ruby-beautify \
