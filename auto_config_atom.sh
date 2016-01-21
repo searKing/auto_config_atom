@@ -202,7 +202,8 @@ function set_default_cfg_param(){
 	# hyperclick \
 	# autocomplete-python \
 	python-tools \
-	eclipse-keybindings"
+	eclipse-keybindings \
+	autocomplete-java"
   	#app插件git地址，与g_addon_names一一对应
 	g_addon_urns="https://github.com/searKing/atom-chs-menu.git \
 	https://github.com/searKing/atom-ctags.git \
@@ -240,7 +241,8 @@ function set_default_cfg_param(){
 	# https://github.com/searKing/hyperclick.git \
 	# https://github.com/searKing/autocomplete-python.git \
 	https://github.com/searKing/python-tools.git \
-	https://github.com/searKing/eclipse-keybindings.git"
+	https://github.com/searKing/eclipse-keybindings.git \
+	https://github.com/searKing/autocomplete-java.git"
 
 	#gem 安装的ruby包
 	g_gem_app_names="ruby-beautify \
