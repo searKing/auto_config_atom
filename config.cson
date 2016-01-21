@@ -1,13 +1,32 @@
 "*":
-  "exception-reporting":
-    userId: "3e7650fb-7f09-2225-ecd9-24a24ac508ba"
+  "android-debugger": {}
+  "atom-beautify":
+    _analyticsUserId: "2928ffc7-ffea-49e3-b8e1-b91368dee3d1"
+    arduino_configPath: "/home/searking/.atom/uncrustify.cfg"
+    c_configPath: "/home/searking/.atom/uncrustify.cfg"
+    cpp_configPath: "/home/searking/.atom/uncrustify.cfg"
+    cs_configPath: "/home/searking/.atom/uncrustify.cfg"
+    java_configPath: "/home/searking/.atom/uncrustify.cfg"
+  "atom-cscope":
+    cscopeSourceFiles: ".c .cc .cpp .h .hpp .java"
+  "atom-ctags":
+    GotoSymbolKey: [
+      "ctrl"
+    ]
+    autoBuildTagsWhenActive: true
+    buildTimeout: 300000
+    cmdArgs: "--exclude=*~ --exclude=*.class --exclude=~* --exclude=.git/ --exclude=.tags[0-9]* --exclude=tags --exclude=cscope.files  --exclude=cscope.in.out  --exclude=cscope.out  --exclude=cscope.po.out"
+  "atom-terminal":
+    app: "/usr/bin/gnome-terminal"
+    args: "--title=\"gnome-terminal-on-atom\""
+  "autocomplete-plus":
+    backspaceTriggersAutocomplete: true
   core:
+    audioBeep: false
     disabledPackages: [
       "symbols-view"
       "markdown-preview"
     ]
-    audioBeep: false
-    fileEncoding: "utf-8"
     ignoredNames: [
       ".git"
       ".hg"
@@ -47,60 +66,52 @@
       "cscope.po.out"
     ]
   editor:
-    invisibles: {}
-    fontSize: 13
-    tabLength: 4
     backUpBeforeSaving: true
     fontFamily: "Microsoft YaHei"
-  "atom-ctags":
-    GotoSymbolKey: [
-      "ctrl"
-    ]
-    autoBuildTagsWhenActive: true
-    buildTimeout: 300000
-    cmdArgs: "--exclude=*~ --exclude=*.class --exclude=~* --exclude=.git/ --exclude=.tags[0-9]* --exclude=tags --exclude=cscope.files  --exclude=cscope.in.out  --exclude=cscope.out  --exclude=cscope.po.out"
-  "atom-cscope":
-    cscopeSourceFiles: ".c .cc .cpp .h .hpp .java"
-  "vim-mode": {}
-  "android-debugger": {}
-  "navigation-history":
-    maxNavigationsToRemember: 10000
+    fontSize: 13
+    invisibles: {}
+    tabLength: 4
+  "exception-reporting":
+    userId: "3e7650fb-7f09-2225-ecd9-24a24ac508ba"
+  "find-and-replace": {}
+  "git-plus": {}
+  linter:
+    showErrorTabLine: true
+  "linter-javac": {}
+  "linter-shellcheck":
+    enableNotice: true
+  "markdown-preview-plus": {}
+  "markdown-writer": {}
   minimap:
-    scrollAnimation: true
     plugins:
-      "google-repo-diff": true
-      "minimap-autohide": true
       bookmarks: true
       codeglance: true
       "find-and-replace": true
       "git-diff": true
-      "minimap-hide": true
+      "google-repo-diff": true
       linter: true
+      "minimap-autohide": true
+      "minimap-hide": true
       pigments: false
       selection: true
       "split-diff": true
-  "git-plus": {}
-  "atom-beautify":
-    _analyticsUserId: "2928ffc7-ffea-49e3-b8e1-b91368dee3d1"
-    cpp_configPath: "/home/searking/.atom/uncrustify.cfg"
-    c_configPath: "/home/searking/.atom/uncrustify.cfg"
-    cs_configPath: "/home/searking/.atom/uncrustify.cfg"
-    arduino_configPath: "/home/searking/.atom/uncrustify.cfg"
-    java_configPath: "/home/searking/.atom/uncrustify.cfg"
+    scrollAnimation: true
   "minimap-codeglance": {}
-  "linter-shellcheck":
-    enableNotice: true
-  "atom-terminal":
-    app: "/usr/bin/gnome-terminal"
-    args: "--title=\"gnome-terminal-on-atom\""
-  linter:
-    showErrorTabLine: true
-  welcome:
-    showOnStartup: false
-  "markdown-writer": {}
-  "markdown-preview-plus": {}
-  "find-and-replace": {}
+  "navigation-history":
+    maxNavigationsToRemember: 10000
+  "python-tools": {}
   "tree-view":
     hideIgnoredNames: true
     hideVcsIgnoredFiles: true
-  # "tidy-markdown": {}
+  "vim-mode": {}
+  welcome:
+    showOnStartup: false
+".python.source":
+  editor:
+    autoIndentOnPaste: true
+"linter-javac":
+  # The path to javac.   The default (javac) should work as long as you have it
+  # in your system PATH.
+  javaExecutablePath: "javac"
+  # Extra classpath.  This will be appended to the classpath when executing javac.
+ classpath: ""
