@@ -43,6 +43,7 @@
 '.platform-linux':
   #eclipse
   'ctrl-shift-r': 'fuzzy-finder:toggle-file-finder'
+  'ctrl-shift-o': 'autocomplete-java:organize-imports'
 'body':
   #eclipse
   'ctrl-o': 'atom-ctags:toggle-file-symbols'
