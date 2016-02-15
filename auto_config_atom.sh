@@ -194,17 +194,18 @@ function set_default_cfg_param(){
 	linter \
 	linter-shellcheck \
 	markdown-writer \
-	# tidy-markdown \
 	linter-markdown \
 	markdown-scroll-sync \
 	markdown-preview-plus \
 	atom-shortcuts \
-	# hyperclick \
-	# autocomplete-python \
 	python-tools \
 	eclipse-keybindings \
 	autocomplete-java \
 	linter-javac"
+	# tidy-markdown \
+	# hyperclick \
+	# autocomplete-python \
+
   	#app插件git地址，与g_addon_names一一对应
 	g_addon_urns="https://github.com/searKing/atom-chs-menu.git \
 	https://github.com/searKing/atom-ctags.git \
@@ -234,17 +235,17 @@ function set_default_cfg_param(){
 	https://github.com/searKing/linter.git \
 	https://github.com/searKing/linter-shellcheck.git \
 	https://github.com/searKing/md-writer.git \
-	# https://github.com/searKing/atom-tidy-markdown.git \
 	https://github.com/searKing/linter-markdown.git \
 	https://github.com/searKing/markdown-scroll-sync.git \
 	https://github.com/searKing/markdown-preview-plus.git \
 	https://github.com/searKing/atom-shortcuts.git \
-	# https://github.com/searKing/hyperclick.git \
-	# https://github.com/searKing/autocomplete-python.git \
 	https://github.com/searKing/python-tools.git \
 	https://github.com/searKing/eclipse-keybindings.git \
 	https://github.com/searKing/autocomplete-java.git \
 	https://github.com/searKing/linter-javac.git"
+	# https://github.com/searKing/atom-tidy-markdown.git \
+	# https://github.com/searKing/hyperclick.git \
+	# https://github.com/searKing/autocomplete-python.git \
 
 	#gem 安装的ruby包
 	g_gem_app_names="ruby-beautify \
